@@ -8,7 +8,6 @@ import com.ironhack.backendProject.LocalDateSerializer;
 import com.ironhack.backendProject.models.embeddeds.PrimaryAddress;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Past;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,14 +15,14 @@ import java.util.List;
 
 @Entity
 public class AccountHolder {
-//TODO extends User¿?
+//TODO extends User
 
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY )
 private Long id;
-@NotEmpty(message = "You must supply a name")
+@NotEmpty
 private String name;
-@Past
+//@Past
 @JsonDeserialize(using = LocalDateDeserializer.class)
 @JsonSerialize(using = LocalDateSerializer.class)
 private LocalDate dateOfBirth;
@@ -35,7 +34,7 @@ private LocalDate dateOfBirth;
             @AttributeOverride(name = "country", column = @Column(name = "country"))
     })
 private PrimaryAddress primaryAddress;
-private String mailingAddres;
+private String mailingAddress;
 
 @OneToMany(mappedBy = "accountHolder", fetch = FetchType.EAGER)
 @JsonIgnore
@@ -44,11 +43,11 @@ private List<Account> accountList = new ArrayList<>();
     public AccountHolder() {
     }
 
-    public AccountHolder(String name, LocalDate dateOfBirth, PrimaryAddress primaryAddress, String mailingAddres) {
+    public AccountHolder(String name, LocalDate dateOfBirth, PrimaryAddress primaryAddress, String mailingAddress) {
         this.name = name;
         this.dateOfBirth = dateOfBirth;
         this.primaryAddress = primaryAddress;
-        this.mailingAddres = mailingAddres;
+        this.mailingAddress = mailingAddress;
     }
 
     public Long getId() {
@@ -83,12 +82,12 @@ private List<Account> accountList = new ArrayList<>();
         this.primaryAddress = primaryAddress;
     }
 
-    public String getMailingAddres() {
-        return mailingAddres;
+    public String getMailingAddress() {
+        return mailingAddress;
     }
 
-    public void setMailingAddres(String mailingAddres) {
-        this.mailingAddres = mailingAddres;
+    public void setMailingAddress(String mailingAddress) {
+        this.mailingAddress = mailingAddress;
     }
 
     public List<Account> getAccountList() {

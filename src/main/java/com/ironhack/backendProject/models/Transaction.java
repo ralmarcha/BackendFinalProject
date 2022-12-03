@@ -10,18 +10,22 @@ import jakarta.validation.constraints.Digits;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-
 @Entity
-public class Transfer {
+public class Transaction {
 
+    //TODO checkFunds()
+    //TODO updateBalance()
+    //TODO si hay tiempo hacer deposit y withdraw con el enum
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
-    private LocalDate dateOfTransfer;
+    private LocalDate dateOfTransaction;
+
     @Digits(integer=9, fraction= 2)
-    private BigDecimal transferAmount;
+    private BigDecimal transactionAmount;
 
     @ManyToOne
     @JoinColumn(name = "account_id")
@@ -35,12 +39,12 @@ public class Transfer {
         this.account = account;
     }
 
-    public Transfer() {
+    public Transaction() {
     }
 
-    public Transfer(LocalDate dateOfTransfer, BigDecimal transferAmount) {
-        this.dateOfTransfer = dateOfTransfer;
-        this.transferAmount = transferAmount;
+    public Transaction(LocalDate dateOfTransaction, BigDecimal transactionAmount) {
+        this.dateOfTransaction = dateOfTransaction;
+        this.transactionAmount = transactionAmount;
     }
 
     public Long getId() {
@@ -51,19 +55,19 @@ public class Transfer {
         this.id = id;
     }
 
-    public LocalDate getDateOfTransfer() {
-        return dateOfTransfer;
+    public LocalDate getDateOfTransaction() {
+        return dateOfTransaction;
     }
 
-    public void setDateOfTransfer(LocalDate dateOfTransfer) {
-        this.dateOfTransfer = dateOfTransfer;
+    public void setDateOfTransaction(LocalDate dateOfTransaction) {
+        this.dateOfTransaction = dateOfTransaction;
     }
 
-    public BigDecimal getTransferAmount() {
-        return transferAmount;
+    public BigDecimal getTransactionAmount() {
+        return transactionAmount;
     }
 
-    public void setTransferAmount(BigDecimal transferAmount) {
-        this.transferAmount = transferAmount;
+    public void setTransactionAmount(BigDecimal transactionAmount) {
+        this.transactionAmount = transactionAmount;
     }
 }

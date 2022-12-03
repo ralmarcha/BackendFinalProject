@@ -1,10 +1,9 @@
 package com.ironhack.backendProject.repositories;
 
-import com.ironhack.backendProject.models.Transfer;
+import com.ironhack.backendProject.models.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TransferRepository extends JpaRepository<Transfer, Long> {
-
+public interface AdminRepository extends JpaRepository<Admin, Long> {
 }

@@ -18,12 +18,14 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Account {
 
+
+    //TODO apply penaltyFee, lastUpdateDate(), updateBalance()
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long Id;
 @NotEmpty
 private String secretKey;
-@NotEmpty
+
 @Digits(integer=9, fraction= 2)
 private BigDecimal balance;
 //private BigDecimal finalBalance;
@@ -31,7 +33,7 @@ private BigDecimal balance;
 private String primaryOwner;
 private String secondaryOwner;
 private final BigDecimal PENALTY_FEE = new BigDecimal(40);
-@NotEmpty
+
 @JsonDeserialize(using = LocalDateDeserializer.class)
 @JsonSerialize(using = LocalDateSerializer.class)
 private LocalDate creationDate;
@@ -44,17 +46,31 @@ private AccountHolder accountHolder;
 
 @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
 @JsonIgnore
-private List<Transfer> transferLists = new ArrayList<>();
+private List<Transaction> transactionLists = new ArrayList<>();
 
-   public Account(String secretKey, BigDecimal balance, String primaryOwner, String secondaryOwner, LocalDate creationDate) {
+     public Account() {
+    }
+
+    public AccountHolder getAccountHolder() {
+        return accountHolder;
+    }
+
+    public Account(String secretKey, BigDecimal balance, String primaryOwner, String secondaryOwner,
+                   LocalDate creationDate, AccountHolder accountHolder) {
         this.secretKey = secretKey;
         this.balance = balance;
         this.primaryOwner = primaryOwner;
         this.secondaryOwner = secondaryOwner;
         this.creationDate = creationDate;
+        this.accountHolder = accountHolder;
     }
 
-    public Account() {
+    public void setAccountHolder(AccountHolder accountHolder) {
+        this.accountHolder = accountHolder;
+    }
+
+    public void setTransactionLists(List<Transaction> transactionLists) {
+        this.transactionLists = transactionLists;
     }
 
     public LocalDate getCreationDate() {
@@ -65,13 +81,12 @@ private List<Transfer> transferLists = new ArrayList<>();
         this.creationDate = creationDate;
     }
 
-     public List<Transfer> getTransferLists() {
-     return transferLists;
+     public List<Transaction> getTransactionLists() {
+     return transactionLists;
      }
 
-    public void setTransferLists(List<Transfer> transferLists) {
-    this.transferLists = transferLists;}
-
+    public void setTransactionrLists(List<Transaction> transactionLists) {
+    this.transactionLists = transactionLists;}
 
     public Long getId() {
         return Id;
