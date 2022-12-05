@@ -26,9 +26,6 @@ import java.util.List;
 @NoArgsConstructor
 public abstract class Account {
 
-    // TODO The penaltyFee for all accounts should be 40.
-// If any account drops below the minimumBalance, the penaltyFee should be deducted from the balance automatically
-    //TODO apply penaltyFee, lastUpdateDate(), updateBalance()
 @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long Id;
@@ -49,6 +46,7 @@ private final BigDecimal PENALTY_FEE = new BigDecimal(40);
 @JsonDeserialize(using = LocalDateDeserializer.class)
 @JsonSerialize(using = LocalDateSerializer.class)
 private LocalDate creationDate;
+
 @JsonDeserialize(using = LocalDateDeserializer.class)
 @JsonSerialize(using = LocalDateSerializer.class)
 private LocalDate lastUpdateDate;

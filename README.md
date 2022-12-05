@@ -14,10 +14,7 @@
  will be added to the account monthly. When the balance of a credit card is accessed, check to determine if it
 has been 1 month or more since the account was created or since interest was added,
  and if so, add the appropriate interest to the balance.
-CreditCard accounts have a default creditLimit of 100
-CreditCards may be instantiated with a creditLimit higher than 100 but not higher than 100000
-CreditCards have a default interestRate of 0.2
-CreditCards may be instantiated with an interestRate less than 0.2 but not lower than 0.1
+
 
 
 [ ]  role poner fijo a ACCOUNT_HOLDER
@@ -33,3 +30,9 @@ Savings accounts have a default interest rate of 0.0025
 Savings accounts may be instantiated with an interest rate other than the default, with a maximum interest rate of 0.5
 Savings accounts should have a default minimumBalance of 1000
 Savings accounts may be instantiated with a minimum balance of less than 1000 but no lower than 100
+[ ]
+
+If any account drops below the minimumBalance, the penaltyFee should be deducted from the balance automatically
+TODO apply penaltyFee, lastUpdateDate(), updateBalance()
+
+checking status default ACTIVE

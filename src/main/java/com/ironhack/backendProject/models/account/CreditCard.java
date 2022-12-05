@@ -2,10 +2,6 @@ package com.ironhack.backendProject.models.account;
 
 import com.ironhack.backendProject.models.user.User;
 import jakarta.persistence.Entity;
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,12 +14,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 public class CreditCard extends Account {
-
-@DecimalMax("0.2")
-@DecimalMin("0.1")
     private BigDecimal interestRate ;
-    @Min(100)
-    @Max(100000)
     private BigDecimal creditLimit;
 
     public CreditCard(String secretKey, BigDecimal balance, User primaryOwner, String secondaryOwner,
@@ -33,4 +24,29 @@ public class CreditCard extends Account {
         setCreditLimit(creditLimit);
     }
 
+    public void setInterestRate(BigDecimal interestRate) {
+        if(interestRate == null){
+            this.interestRate= BigDecimal.valueOf(0.2);
+        }
+               else if(interestRate.compareTo(BigDecimal.valueOf(0.1)) < 0){
+            this.interestRate= interestRate;
+        } else{
+            System.out.println("Interest rate can not be lower than 0.1");
+            this.interestRate = BigDecimal.valueOf(0.1);
+        }
+    }
+
+    public void setCreditLimit(BigDecimal creditLimit) {
+    if(creditLimit == null){
+    this.creditLimit= BigDecimal.valueOf(100);
+    }
+       else if(creditLimit.compareTo(BigDecimal.valueOf(100000)) < 0){
+            if (creditLimit.compareTo(BigDecimal.valueOf(100)) >= 0){
+                this.creditLimit = creditLimit;
+            }else{
+                System.out.println("Credit limit can not be higher than 100000");
+                this.creditLimit= BigDecimal.valueOf(100000);
+            }
+    }
+    }
 }
