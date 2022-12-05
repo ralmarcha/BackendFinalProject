@@ -20,7 +20,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class AccountHolder extends User{
 
-//@Past
 @JsonDeserialize(using = LocalDateDeserializer.class)
 @JsonSerialize(using = LocalDateSerializer.class)
 private LocalDate dateOfBirth;
@@ -41,7 +40,7 @@ private String mailingAddress;
         this.primaryAddress = primaryAddress;
         this.mailingAddress = mailingAddress;
     }
-//TODO role poner fijo a ACCOUNT_HOLDER
+
 
 
 }

@@ -19,13 +19,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class CreditCard extends Account {
 
-//Interest on credit cards is added to the balance monthly. If you have a 12% interest rate (0.12) then 1% interest
-// will be added to the account monthly. When the balance of a credit card is accessed, check to determine if it
-// has been 1 month or more since the account was created or since interest was added,
-// and if so, add the appropriate interest to the balance.
 @DecimalMax("0.2")
 @DecimalMin("0.1")
-    private BigDecimal interestRate;
+    private BigDecimal interestRate ;
     @Min(100)
     @Max(100000)
     private BigDecimal creditLimit;
@@ -37,17 +33,4 @@ public class CreditCard extends Account {
         setCreditLimit(creditLimit);
     }
 
-    public void setInterestRate(BigDecimal interestRate) {
-        if(interestRate==null ){
-            this.interestRate= new BigDecimal(0.2);
-        }
-        this.interestRate = interestRate;
-    }
-
-    public void setCreditLimit(BigDecimal creditLimit) {
-        if(creditLimit==null ){
-            this.creditLimit= new BigDecimal(100);
-        }
-        this.creditLimit = creditLimit;
-    }
 }

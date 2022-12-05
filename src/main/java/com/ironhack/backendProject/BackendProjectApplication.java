@@ -1,16 +1,11 @@
 package com.ironhack.backendProject;
 
 import com.ironhack.backendProject.enums.Status;
-import com.ironhack.backendProject.models.account.Account;
+import com.ironhack.backendProject.models.account.*;
 import com.ironhack.backendProject.models.user.AccountHolder;
-import com.ironhack.backendProject.models.account.Checking;
-import com.ironhack.backendProject.models.account.Savings;
 import com.ironhack.backendProject.models.embeddeds.PrimaryAddress;
 import com.ironhack.backendProject.repositories.*;
-import com.ironhack.backendProject.repositories.account.AccountRepository;
-import com.ironhack.backendProject.repositories.account.CheckingRepository;
-import com.ironhack.backendProject.repositories.account.CreditCardRepository;
-import com.ironhack.backendProject.repositories.account.SavingsRepository;
+import com.ironhack.backendProject.repositories.account.*;
 import com.ironhack.backendProject.repositories.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -56,6 +51,9 @@ public class BackendProjectApplication implements CommandLineRunner {
 	@Autowired
 	CreditCardRepository creditCardRepository;
 
+	@Autowired
+	StudentCheckingRepository studentCheckingRepository;
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(BackendProjectApplication.class, args);
@@ -72,7 +70,7 @@ public class BackendProjectApplication implements CommandLineRunner {
 		accountHolderRepository.save(accountHolder1);
 		//----------ACCOUNTS CREADAS 1 DE CADA-----------//
         Account account1 = new Checking("abc", new BigDecimal(1000), accountHolder1,
-	null, LocalDate.of(2022, 05, 05), new BigDecimal(250),
+	null, LocalDate.of(2022, 05, 05),
 		 Status.ACTIVE);
 
 
@@ -80,8 +78,18 @@ public class BackendProjectApplication implements CommandLineRunner {
 			null, LocalDate.of(2022, 05, 05), null,null,
 			 Status.ACTIVE);
 
+		Account account3 = new StudentChecking("abc", new BigDecimal(1000), accountHolder1,
+				null, LocalDate.of(2022, 05, 05),
+				Status.ACTIVE);
+
+
+		Account account4 = new CreditCard("abc", new BigDecimal(1000), accountHolder1,
+				null, LocalDate.of(2022, 05, 05), null,null);
+
          accountRepository.save(account1);
 		accountRepository.save(account2);
+		accountRepository.save(account3);
+		accountRepository.save(account4);
 
 
 		//----------TRANSFERS CREADAS-----------//

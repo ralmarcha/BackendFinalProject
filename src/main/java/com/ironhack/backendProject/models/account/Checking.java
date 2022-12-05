@@ -19,21 +19,16 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class Checking extends Account {
 
-//TODO When creating a new Checking account, if the primaryOwner is less than 24, a StudentChecking account should be created otherwise a regular Checking Account should be created.
-
-
-@Min(value = 250)
-private BigDecimal minimumBalance;
+private BigDecimal minimumBalance = BigDecimal.valueOf(250);
 private BigDecimal monthlyMaintenanceFee = BigDecimal.valueOf(12);
 
 @Enumerated(EnumType.STRING)
 private Status status;
 
   public Checking(String secretKey, BigDecimal balance, User primaryOwner, String secondaryOwner,
-                  LocalDate creationDate, BigDecimal minimumBalance,
+                  LocalDate creationDate,
                   Status status) {
     super(secretKey, balance, primaryOwner, secondaryOwner, creationDate);
-    this.minimumBalance = minimumBalance;
     this.status = status;
   }
 }
