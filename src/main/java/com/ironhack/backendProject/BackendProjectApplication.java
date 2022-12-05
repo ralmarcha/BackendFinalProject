@@ -1,12 +1,17 @@
 package com.ironhack.backendProject;
 
-import com.ironhack.backendProject.enums.CheckingType;
 import com.ironhack.backendProject.enums.Status;
-import com.ironhack.backendProject.models.Account;
-import com.ironhack.backendProject.models.AccountHolder;
-import com.ironhack.backendProject.models.Checking;
+import com.ironhack.backendProject.models.account.Account;
+import com.ironhack.backendProject.models.user.AccountHolder;
+import com.ironhack.backendProject.models.account.Checking;
+import com.ironhack.backendProject.models.account.Savings;
 import com.ironhack.backendProject.models.embeddeds.PrimaryAddress;
 import com.ironhack.backendProject.repositories.*;
+import com.ironhack.backendProject.repositories.account.AccountRepository;
+import com.ironhack.backendProject.repositories.account.CheckingRepository;
+import com.ironhack.backendProject.repositories.account.CreditCardRepository;
+import com.ironhack.backendProject.repositories.account.SavingsRepository;
+import com.ironhack.backendProject.repositories.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -62,15 +67,23 @@ public class BackendProjectApplication implements CommandLineRunner {
 		//----------AccountHolders-----------//
 		PrimaryAddress primaryAddress1 = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
 		//----------AccountHolders-----------//
-		AccountHolder accountHolder1= new AccountHolder("Raquel", LocalDate.of(1982, 05, 10),primaryAddress1,
+		AccountHolder accountHolder1= new AccountHolder("Raquel","123", LocalDate.of(1982, 05, 10),primaryAddress1,
 				null );
 		accountHolderRepository.save(accountHolder1);
 		//----------ACCOUNTS CREADAS 1 DE CADA-----------//
-        Account account1 = new Checking("abc", new BigDecimal(1000), "Raquel",
-	null, LocalDate.of(2022, 05, 05),accountHolder1, new BigDecimal(250),
-		new BigDecimal(12), Status.ACTIVE, CheckingType.CHECKING );
+        Account account1 = new Checking("abc", new BigDecimal(1000), accountHolder1,
+	null, LocalDate.of(2022, 05, 05), new BigDecimal(250),
+		 Status.ACTIVE);
+
+
+		Account account2 = new Savings("abc", new BigDecimal(1000), accountHolder1,
+			null, LocalDate.of(2022, 05, 05), null,null,
+			 Status.ACTIVE);
 
          accountRepository.save(account1);
+		accountRepository.save(account2);
+
+
 		//----------TRANSFERS CREADAS-----------//
 
 		//----------Admins-----------//

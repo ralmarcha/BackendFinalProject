@@ -1,7 +1,7 @@
 package com.ironhack.backendProject.security;
 
-import com.ironhack.backendProject.models.*;
-import com.ironhack.backendProject.models.User;
+import com.ironhack.backendProject.models.user.User;
+import com.ironhack.backendProject.models.user.Role;
 import org.springframework.security.core.*;
 import org.springframework.security.core.authority.*;
 import org.springframework.security.core.userdetails.*;
@@ -16,12 +16,11 @@ public class CustomUserDetails implements UserDetails {
         this.user = user;
     }
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new HashSet<>();
 
-        for (Role role : user.getRoles()) {
+        for (Role role : user.getRole()) {
             authorities.add(new SimpleGrantedAuthority("ROLE_"  + role.getRole()));
         }
 

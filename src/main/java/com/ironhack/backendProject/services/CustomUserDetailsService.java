@@ -1,8 +1,8 @@
 package com.ironhack.backendProject.services;
 
-import com.ironhack.backendProject.models.User;
+import com.ironhack.backendProject.models.user.User;
 
-import com.ironhack.backendProject.repositories.UserRepository;
+import com.ironhack.backendProject.repositories.user.UserRepository;
 import com.ironhack.backendProject.security.CustomUserDetails;
 
 import org.springframework.beans.factory.annotation.*;

@@ -1,6 +1,6 @@
-package com.ironhack.backendProject.repositories;
+package com.ironhack.backendProject.repositories.account;
 
-import com.ironhack.backendProject.models.Checking;
+import com.ironhack.backendProject.models.account.Checking;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
