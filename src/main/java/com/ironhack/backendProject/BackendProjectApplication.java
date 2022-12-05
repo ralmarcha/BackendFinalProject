@@ -70,21 +70,21 @@ public class BackendProjectApplication implements CommandLineRunner {
 		accountHolderRepository.save(accountHolder1);
 		//----------ACCOUNTS CREADAS 1 DE CADA-----------//
         Account account1 = new Checking("abc", new BigDecimal(1000), accountHolder1,
-	null, LocalDate.of(2022, 05, 05),
+	null, LocalDate.of(2022, 05, 05),LocalDate.of(2022,05,05),
 		 Status.ACTIVE);
 
 
 		Account account2 = new Savings("abc", new BigDecimal(1000), accountHolder1,
-			null, LocalDate.of(2022, 05, 05), null,null,
+			null, LocalDate.of(2022, 05, 05),LocalDate.of(2022,05,05),null,null,
 			 Status.ACTIVE);
 
 		Account account3 = new StudentChecking("abc", new BigDecimal(1000), accountHolder1,
-				null, LocalDate.of(2022, 05, 05),
+				null, LocalDate.of(2022, 05, 05),LocalDate.of(2022,05,05),
 				Status.ACTIVE);
 
 
 		Account account4 = new CreditCard("abc", new BigDecimal(1000), accountHolder1,
-				null, LocalDate.of(2022, 05, 05), null,null);
+				null, LocalDate.of(2022, 05, 05), LocalDate.of(2022,05,05),null,null);
 
          accountRepository.save(account1);
 		accountRepository.save(account2);

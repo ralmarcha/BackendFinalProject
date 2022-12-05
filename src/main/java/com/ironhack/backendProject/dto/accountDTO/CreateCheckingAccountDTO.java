@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 
 @Getter
 @Setter
@@ -15,5 +17,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CreateCheckingAccountDTO extends CreateAccountDTO {
     private Status status;
-
+    private BigDecimal minimumBalance;
  }

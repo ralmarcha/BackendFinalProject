@@ -41,39 +41,27 @@ private User primaryOwner;
 
 private String secondaryOwner;
 
-private final BigDecimal PENALTY_FEE = new BigDecimal(40);
+private final BigDecimal PENALTY_FEE = BigDecimal.valueOf(40);
 
 @JsonDeserialize(using = LocalDateDeserializer.class)
 @JsonSerialize(using = LocalDateSerializer.class)
 private LocalDate creationDate;
-
-@JsonDeserialize(using = LocalDateDeserializer.class)
-@JsonSerialize(using = LocalDateSerializer.class)
-private LocalDate lastUpdateDate;
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
+private LocalDate lastUpdateDate = LocalDate.now();
 
 
 @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
 @JsonIgnore
 private List<Transaction> transactionLists = new ArrayList<>();
 
-
-/*   @JsonIgnore
-    @OneToMany(mappedBy = "originAccount")
-    List<Transfer> transfersSent;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "destinationAccount")
-    List<Transfer> transfersReceived;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "account")
-    List<Interest> interest;*/
-
-    public Account(String secretKey, BigDecimal balance, User primaryOwner, String secondaryOwner, LocalDate creationDate) {
+public Account(String secretKey, BigDecimal balance, User primaryOwner, String secondaryOwner, LocalDate creationDate, LocalDate lastUpdateDate) {
         this.secretKey = secretKey;
         this.balance = balance;
         this.primaryOwner = primaryOwner;
         this.secondaryOwner = secondaryOwner;
         this.creationDate = creationDate;
+        setLastUpdateDate(lastUpdateDate);
     }
-}
+
+ }

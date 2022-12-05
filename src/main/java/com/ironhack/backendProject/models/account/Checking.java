@@ -5,6 +5,7 @@ import com.ironhack.backendProject.models.user.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Period;
 
 @Entity
 @Getter
@@ -21,14 +23,40 @@ public class Checking extends Account {
 
 private BigDecimal minimumBalance = BigDecimal.valueOf(250);
 private BigDecimal monthlyMaintenanceFee = BigDecimal.valueOf(12);
+private LocalDate lastMaintenance ;
 
 @Enumerated(EnumType.STRING)
 private Status status;
 
   public Checking(String secretKey, BigDecimal balance, User primaryOwner, String secondaryOwner,
-                  LocalDate creationDate,
+                  LocalDate creationDate,LocalDate lastUpdateDate,
                   Status status) {
-    super(secretKey, balance, primaryOwner, secondaryOwner, creationDate);
+    super(secretKey, balance, primaryOwner, secondaryOwner, creationDate, lastUpdateDate);
     this.status = status;
   }
-}
+
+  @Override
+  public void setBalance(BigDecimal balance) {
+     // addMaintenance();
+    //-----------PENALTY FEE-------------------//
+    if(balance.compareTo(BigDecimal.valueOf(250))<0){
+      super.setBalance(balance.subtract(super.getPENALTY_FEE())) ;
+    }else{
+      super.setBalance(balance);
+  }
+     }
+    public void setLastMaintenance(LocalDate lastMaintenance) {
+        if(getLastMaintenance() == null){
+            this.lastMaintenance =super.getCreationDate();
+        }else{
+            this.lastMaintenance = lastMaintenance;
+        } }
+
+   /* public void addMaintenance(){
+        if(Period.between(getLastMaintenance(), LocalDate.now()).getMonths()>=1){
+            super.setBalance(getBalance().add((BigDecimal.valueOf(12)).multiply(BigDecimal.valueOf(Period.between(getLastMaintenance(), LocalDate.now()).getMonths()))));
+            setLastMaintenance(getLastMaintenance().plusMonths(Period.between(getLastMaintenance(), LocalDate.now()).getMonths()));
+        }
+    }*/
+
+    }
