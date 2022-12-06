@@ -16,7 +16,6 @@ import java.time.LocalDate;
 public abstract class CreateAccountDTO {
     private String secretKey;
     private BigDecimal balance;
-    private AccountHolder primaryOwner;
-    private LocalDate creationDate;
+    private Long primaryOwnerId;
 
 }

@@ -20,8 +20,8 @@ public class CreditCard extends Account {
     private BigDecimal creditLimit;
 
     public CreditCard(String secretKey, BigDecimal balance, User primaryOwner, String secondaryOwner,
-                      LocalDate creationDate,LocalDate lastUpdateDate, BigDecimal interestRate, BigDecimal creditLimit) {
-        super(secretKey, balance, primaryOwner, secondaryOwner, creationDate, lastUpdateDate);
+                      BigDecimal interestRate, BigDecimal creditLimit) {
+        super(secretKey, balance, primaryOwner, secondaryOwner);
         setInterestRate(interestRate);
         setCreditLimit(creditLimit);
     }

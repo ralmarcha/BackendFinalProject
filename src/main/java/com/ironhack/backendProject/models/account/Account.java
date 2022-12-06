@@ -45,9 +45,10 @@ private final BigDecimal PENALTY_FEE = BigDecimal.valueOf(40);
 
 @JsonDeserialize(using = LocalDateDeserializer.class)
 @JsonSerialize(using = LocalDateSerializer.class)
-private LocalDate creationDate;
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = LocalDateSerializer.class)
+private LocalDate creationDate = LocalDate.now();
+
+@JsonDeserialize(using = LocalDateDeserializer.class)
+@JsonSerialize(using = LocalDateSerializer.class)
 private LocalDate lastUpdateDate = LocalDate.now();
 
 
@@ -55,13 +56,10 @@ private LocalDate lastUpdateDate = LocalDate.now();
 @JsonIgnore
 private List<Transaction> transactionLists = new ArrayList<>();
 
-public Account(String secretKey, BigDecimal balance, User primaryOwner, String secondaryOwner, LocalDate creationDate, LocalDate lastUpdateDate) {
+public Account(String secretKey, BigDecimal balance, User primaryOwner, String secondaryOwner) {
         this.secretKey = secretKey;
         this.balance = balance;
         this.primaryOwner = primaryOwner;
         this.secondaryOwner = secondaryOwner;
-        this.creationDate = creationDate;
-        setLastUpdateDate(lastUpdateDate);
-    }
-
- }
+}
+}

@@ -14,6 +14,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Optional;
 
 @Entity
 @Getter
@@ -23,15 +24,14 @@ public class Checking extends Account {
 
 private BigDecimal minimumBalance = BigDecimal.valueOf(250);
 private BigDecimal monthlyMaintenanceFee = BigDecimal.valueOf(12);
-private LocalDate lastMaintenance ;
+
 
 @Enumerated(EnumType.STRING)
 private Status status;
 
   public Checking(String secretKey, BigDecimal balance, User primaryOwner, String secondaryOwner,
-                  LocalDate creationDate,LocalDate lastUpdateDate,
-                  Status status) {
-    super(secretKey, balance, primaryOwner, secondaryOwner, creationDate, lastUpdateDate);
+                                  Status status) {
+    super(secretKey, balance, primaryOwner, secondaryOwner);
     this.status = status;
   }
 
@@ -45,14 +45,14 @@ private Status status;
       super.setBalance(balance);
   }
      }
-    public void setLastMaintenance(LocalDate lastMaintenance) {
+   /* public void setLastMaintenance(LocalDate lastMaintenance) {
         if(getLastMaintenance() == null){
             this.lastMaintenance =super.getCreationDate();
         }else{
             this.lastMaintenance = lastMaintenance;
-        } }
+        } }*/
 
-   /* public void addMaintenance(){
+ /*  public void addMaintenance(){
         if(Period.between(getLastMaintenance(), LocalDate.now()).getMonths()>=1){
             super.setBalance(getBalance().add((BigDecimal.valueOf(12)).multiply(BigDecimal.valueOf(Period.between(getLastMaintenance(), LocalDate.now()).getMonths()))));
             setLastMaintenance(getLastMaintenance().plusMonths(Period.between(getLastMaintenance(), LocalDate.now()).getMonths()));

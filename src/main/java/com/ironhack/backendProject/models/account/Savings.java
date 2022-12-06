@@ -27,8 +27,8 @@ public class Savings extends Account {
     private Status status;
 
     public Savings(String secretKey, BigDecimal balance, User primaryOwner, String secondaryOwner,
-                   LocalDate creationDate,LocalDate lastUpdateDate, BigDecimal interestRate, BigDecimal minimumBalance, Status status) {
-        super(secretKey, balance, primaryOwner, secondaryOwner, creationDate, lastUpdateDate);
+                    BigDecimal interestRate, BigDecimal minimumBalance, Status status) {
+        super(secretKey, balance, primaryOwner, secondaryOwner);
         setInterestRate(interestRate);
         setMinimumBalance(minimumBalance);
         this.status = status;

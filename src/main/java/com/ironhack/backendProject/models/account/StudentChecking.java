@@ -22,8 +22,8 @@ public class StudentChecking extends Account{
     private Status status;
 
     public StudentChecking(String secretKey, BigDecimal balance, User primaryOwner, String secondaryOwner,
-                           LocalDate creationDate, LocalDate lastUpdateDate, Status status) {
-        super(secretKey, balance, primaryOwner, secondaryOwner, creationDate, lastUpdateDate);
+                          Status status) {
+        super(secretKey, balance, primaryOwner, secondaryOwner);
         this.status = status;
     }
 
