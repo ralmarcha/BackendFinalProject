@@ -64,7 +64,7 @@ public class AdminController {
     }
 
     //------------------------------SET BALANCE----------------------------------//
-    @PostMapping("/set-balance/{id}")
+    @PatchMapping("/set-balance/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Account setBalance(@PathVariable Long id, @RequestParam BigDecimal balance) {
         return adminService.setBalance(id,balance);

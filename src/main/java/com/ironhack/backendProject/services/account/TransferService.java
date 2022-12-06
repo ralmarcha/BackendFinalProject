@@ -1,5 +1,6 @@
 package com.ironhack.backendProject.services.account;
 
+import com.ironhack.backendProject.dto.AccountHolderTransferDTO;
 import com.ironhack.backendProject.dto.ReceiveTransferDTO;
 import com.ironhack.backendProject.dto.SendTransferDTO;
 import com.ironhack.backendProject.models.account.Transaction;
@@ -24,8 +25,8 @@ public class TransferService {
     @Autowired
     ThirdPartyService thirdPartyService;
 
-
-    public Transaction createExternalTransfer(SendTransferDTO sendTransferDTO) {
+    //-----------------------------------THIRD PARTY SEND TRANSFER----------------------------//
+    public Transaction sendTransfer(SendTransferDTO sendTransferDTO) {
 
         Account account = adminService.findAccountById(sendTransferDTO.getAccountId());
         if (account.getBalance().compareTo(BigDecimal.valueOf(sendTransferDTO.getAmount())) < 0) {
@@ -36,7 +37,7 @@ public class TransferService {
         account.setBalance(accountBalance);
         adminService.saveAccount(account);
 
-        Transaction transfer = new Transaction( LocalDate.now(),  BigDecimal.valueOf(sendTransferDTO.getAmount()), account);
+        Transaction transfer = new Transaction( null, account, BigDecimal.valueOf(sendTransferDTO.getAmount()));
         return transactionRepository.save(transfer);
     }
 
@@ -44,7 +45,7 @@ public class TransferService {
 
 //-----------------------------------THIRD PARTY RECEIVE TRANSFER----------------------------//
 
-    public Transaction getExternalTransfer(String hashKey, ReceiveTransferDTO receiveTransferDTO) {
+    public Transaction receiveTransfer(String hashKey, ReceiveTransferDTO receiveTransferDTO) {
 
         thirdPartyService.getThirdPartyByHashKey(hashKey);
 
@@ -58,7 +59,8 @@ public class TransferService {
         account.setBalance(accountBalance);
         adminService.saveAccount(account);
 
-       Transaction transfer = new Transaction( LocalDate.now(),  BigDecimal.valueOf(receiveTransferDTO.getAmount()), account);
+       Transaction transfer = new Transaction( account, null,  BigDecimal.valueOf(receiveTransferDTO.getAmount()));
         return transactionRepository.save(transfer);
     }
+
 }

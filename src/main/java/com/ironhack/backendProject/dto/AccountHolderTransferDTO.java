@@ -18,9 +18,6 @@ public class AccountHolderTransferDTO {
 
     private Long destinationAccountId;
 
-    @Digits(integer = 6, fraction = 2)
-    private BigDecimal amount;
-
-   private String userName;
+      private double amount;
 
 }

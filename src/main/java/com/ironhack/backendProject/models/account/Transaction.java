@@ -38,9 +38,7 @@ public class Transaction {
     @ManyToOne
     @JoinColumn
     private Account destinationAccount;
-    @ManyToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
+
 
     public Transaction(Account originAccount, Account destinationAccount, BigDecimal amount) {
         this.originAccount = originAccount;

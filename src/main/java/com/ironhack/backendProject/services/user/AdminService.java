@@ -8,6 +8,7 @@ import com.ironhack.backendProject.models.account.*;
 import com.ironhack.backendProject.models.user.AccountHolder;
 import com.ironhack.backendProject.repositories.account.AccountRepository;
 import com.ironhack.backendProject.repositories.user.AccountHolderRepository;
+import com.ironhack.backendProject.services.account.AccountService;
 import com.ironhack.backendProject.services.interfaces.AdminServiceInt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,9 @@ public class AdminService implements AdminServiceInt {
 
     @Autowired
     AccountHolderRepository accountHolderRepository;
+
+    @Autowired
+    AccountService accountService;
 
 //-----------------------------ACCOUNTS-----------------------------------------------//
 //-------------------------GET ALL ACCOUNTS--------------------------------------//
@@ -183,6 +187,8 @@ public List<Account> getAllAccounts() {
     public BigDecimal getBalance(Long id) {
         if (accountRepository.findById(id).isPresent()) {
             Account account = accountRepository.findById(id).get();
+            accountService.checkInterestByAccount(account);
+            accountService.checkMaintenance(account);
             return account.getBalance();
         }
         throw  new IllegalArgumentException("Account not found");

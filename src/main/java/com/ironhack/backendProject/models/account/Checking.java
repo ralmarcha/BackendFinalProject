@@ -45,18 +45,6 @@ private Status status;
       super.setBalance(balance);
   }
      }
-   /* public void setLastMaintenance(LocalDate lastMaintenance) {
-        if(getLastMaintenance() == null){
-            this.lastMaintenance =super.getCreationDate();
-        }else{
-            this.lastMaintenance = lastMaintenance;
-        } }*/
 
- /*  public void addMaintenance(){
-        if(Period.between(getLastMaintenance(), LocalDate.now()).getMonths()>=1){
-            super.setBalance(getBalance().add((BigDecimal.valueOf(12)).multiply(BigDecimal.valueOf(Period.between(getLastMaintenance(), LocalDate.now()).getMonths()))));
-            setLastMaintenance(getLastMaintenance().plusMonths(Period.between(getLastMaintenance(), LocalDate.now()).getMonths()));
-        }
-    }*/
 
     }
