@@ -13,7 +13,7 @@ import lombok.Setter;
 public class ThirdParty extends User{
 
     @NotEmpty
-    private String hashedKey;
+    private String hashKey;
 
     public ThirdParty(String username, String password) {
         super(username, password);

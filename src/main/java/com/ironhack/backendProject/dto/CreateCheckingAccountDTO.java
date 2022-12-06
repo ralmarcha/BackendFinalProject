@@ -1,4 +1,4 @@
-package com.ironhack.backendProject.dto.accountDTO;
+package com.ironhack.backendProject.dto;
 
 import com.ironhack.backendProject.enums.Status;
 import lombok.AllArgsConstructor;
@@ -8,12 +8,12 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateSavingsDTO extends CreateAccountDTO{
+public class CreateCheckingAccountDTO extends CreateAccountDTO {
     private Status status;
-    private BigDecimal interestRate;
     private BigDecimal minimumBalance;
-}
+  }

@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.ironhack.backendProject.LocalDateDeserializer;
 import com.ironhack.backendProject.LocalDateSerializer;
-import com.ironhack.backendProject.models.Transaction;
 import com.ironhack.backendProject.models.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
@@ -16,7 +15,6 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -51,11 +49,13 @@ private LocalDate creationDate = LocalDate.now();
 @JsonSerialize(using = LocalDateSerializer.class)
 private LocalDate lastUpdateDate = LocalDate.now();
 
-
-@OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
 @JsonIgnore
-private List<Transaction> transactionLists = new ArrayList<>();
+@OneToMany(mappedBy = "originAccount", fetch = FetchType.EAGER)
+List<Transaction> transfersSent;
 
+@JsonIgnore
+@OneToMany(mappedBy = "destinationAccount", fetch = FetchType.EAGER)
+List<Transaction> transfersReceived;
 public Account(String secretKey, BigDecimal balance, User primaryOwner, String secondaryOwner) {
         this.secretKey = secretKey;
         this.balance = balance;

@@ -1,4 +1,4 @@
-package com.ironhack.backendProject.services;
+package com.ironhack.backendProject.services.user;
 
 import com.ironhack.backendProject.models.user.User;
 
@@ -22,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         Optional<User> user = userRepository.findByUsername(username);
 
         if (!user.isPresent()) {
-            throw new UsernameNotFoundException("El usuario no existe");
+            throw new UsernameNotFoundException("User does not exist");
         }
 
         CustomUserDetails customUserDetails = new CustomUserDetails(user.get());

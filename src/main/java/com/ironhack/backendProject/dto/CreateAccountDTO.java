@@ -1,4 +1,4 @@
-package com.ironhack.backendProject.dto.accountDTO;
+package com.ironhack.backendProject.dto;
 
 import com.ironhack.backendProject.models.user.AccountHolder;
 import lombok.AllArgsConstructor;
@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -16,6 +15,5 @@ import java.time.LocalDate;
 public abstract class CreateAccountDTO {
     private String secretKey;
     private BigDecimal balance;
-    private Long primaryOwnerId;
-
+    private AccountHolder primaryOwner;
 }

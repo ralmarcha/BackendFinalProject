@@ -1,4 +1,4 @@
-package com.ironhack.backendProject.models;
+package com.ironhack.backendProject.models.account;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -7,6 +7,7 @@ import com.ironhack.backendProject.LocalDateSerializer;
 import com.ironhack.backendProject.models.account.Account;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,29 +19,32 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Transaction {
 
-    //TODO checkFunds()
-    //TODO updateBalance()
-    //TODO si hay tiempo hacer deposit y withdraw con el enum
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = LocalDateSerializer.class)
-    private LocalDate dateOfTransaction;
+   @JsonSerialize(using = LocalDateSerializer.class)
+    private final LocalDate transferDate = LocalDate.now();
 
     @Digits(integer=9, fraction= 2)
-    private BigDecimal transactionAmount;
-
+    private BigDecimal amount;
+    @ManyToOne
+    @JoinColumn
+    private Account originAccount;
+    @ManyToOne
+    @JoinColumn
+    private Account destinationAccount;
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
 
-    public Transaction(LocalDate dateOfTransaction, BigDecimal transactionAmount) {
-        this.dateOfTransaction = dateOfTransaction;
-        this.transactionAmount = transactionAmount;
+    public Transaction(Account originAccount, Account destinationAccount, BigDecimal amount) {
+        this.originAccount = originAccount;
+        this.destinationAccount = destinationAccount;
+        this.amount = amount;
     }
-
-   }
+}

@@ -1,6 +1,5 @@
-package com.ironhack.backendProject.dto.accountDTO;
+package com.ironhack.backendProject.dto;
 
-import com.ironhack.backendProject.dto.accountDTO.CreateAccountDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

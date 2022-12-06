@@ -1,10 +1,10 @@
 package com.ironhack.backendProject.controllers;
 
-import com.ironhack.backendProject.dto.accountDTO.CreateCheckingAccountDTO;
-import com.ironhack.backendProject.dto.accountDTO.CreateCreditCardDTO;
-import com.ironhack.backendProject.dto.accountDTO.CreateSavingsDTO;
+import com.ironhack.backendProject.dto.CreateCheckingAccountDTO;
+import com.ironhack.backendProject.dto.CreateCreditCardDTO;
+import com.ironhack.backendProject.dto.CreateSavingsDTO;
 import com.ironhack.backendProject.models.account.Account;
-import com.ironhack.backendProject.services.AdminService;
+import com.ironhack.backendProject.services.user.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -49,18 +49,13 @@ public class AdminController {
         adminService.deleteAccountById(id);
     }
 
-    //-----------------------------UPDATE ACCOUNT----------------------------------//
-    @PutMapping("account/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Account updateAccount(@PathVariable Long id, @RequestBody Account account){
-        return adminService.updateAccount(id, account);
-    }
     //------------------------------GET ACCOUNT----------------------------------//
     @GetMapping("/account/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Account findAccountById(@PathVariable Long id) {
         return adminService.findAccountById(id);
     }
+
     //------------------------------GET BALANCE----------------------------------//
     @GetMapping("/check-balance/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -71,7 +66,7 @@ public class AdminController {
     //------------------------------SET BALANCE----------------------------------//
     @PostMapping("/set-balance/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public BigDecimal setBalance(@PathVariable Long id, @RequestParam BigDecimal balance) {
+    public Account setBalance(@PathVariable Long id, @RequestParam BigDecimal balance) {
         return adminService.setBalance(id,balance);
     }
 }

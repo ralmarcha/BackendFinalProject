@@ -4,7 +4,6 @@ import com.ironhack.backendProject.enums.Status;
 import com.ironhack.backendProject.models.account.*;
 import com.ironhack.backendProject.models.user.AccountHolder;
 import com.ironhack.backendProject.models.embeddeds.PrimaryAddress;
-import com.ironhack.backendProject.repositories.*;
 import com.ironhack.backendProject.repositories.account.*;
 import com.ironhack.backendProject.repositories.user.*;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,26 +1,24 @@
-package com.ironhack.backendProject.services;
+package com.ironhack.backendProject.services.user;
 
-import com.ironhack.backendProject.dto.accountDTO.CreateCheckingAccountDTO;
-import com.ironhack.backendProject.dto.accountDTO.CreateCreditCardDTO;
-import com.ironhack.backendProject.dto.accountDTO.CreateSavingsDTO;
+import com.ironhack.backendProject.dto.CreateCheckingAccountDTO;
+import com.ironhack.backendProject.dto.CreateCreditCardDTO;
+import com.ironhack.backendProject.dto.CreateSavingsDTO;
 import com.ironhack.backendProject.enums.Status;
 import com.ironhack.backendProject.models.account.*;
 import com.ironhack.backendProject.models.user.AccountHolder;
-import com.ironhack.backendProject.models.user.Admin;
-import com.ironhack.backendProject.models.user.ThirdParty;
-import com.ironhack.backendProject.models.user.User;
 import com.ironhack.backendProject.repositories.account.AccountRepository;
 import com.ironhack.backendProject.repositories.user.AccountHolderRepository;
 import com.ironhack.backendProject.services.interfaces.AdminServiceInt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
-
+@Service
 public class AdminService implements AdminServiceInt {
 
     @Autowired
@@ -29,49 +27,32 @@ public class AdminService implements AdminServiceInt {
     @Autowired
     AccountHolderRepository accountHolderRepository;
 
-    @Override
-    public List<User> getAllUsers() {
-        return null;
-    }
-
-    @Override
-    public AccountHolder createAccountHolder(AccountHolder accountHolder) {
-        return null;
-    }
-
-    @Override
-    public Admin createAdmin(Admin admin) {
-        return null;
-    }
-
-    @Override
-    public ThirdParty createThirdParty(ThirdParty thirdParty) {
-        return null;
-    }
-
-    //-------------------------GET ALL ACCOUNTS--------------------------------------//
-    public List<Account> getAllAccounts() {
-        return accountRepository.findAll();
-    }
+//-----------------------------ACCOUNTS-----------------------------------------------//
+//-------------------------GET ALL ACCOUNTS--------------------------------------//
+public List<Account> getAllAccounts() {
+    return accountRepository.findAll();
+}
 
     //-------------------------CREATE ACCOUNTS-----------------------------------------//
     //------------------CREATE CHECKING ACCOUNT--------------------------------------//
     public Account createCheckingAccount(CreateCheckingAccountDTO checkingAccount) {
         //-------------primary owner not found-------------------//
-        AccountHolder primaryOwner = accountHolderRepository.findById(checkingAccount.getPrimaryOwnerId()).orElseThrow(()->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Primary Owner does not exist"));
 
-        if((Period.between(primaryOwner.getDateOfBirth(), LocalDate.now()).getYears())<24){
+        if((Period.between(checkingAccount.getPrimaryOwner().getDateOfBirth(), LocalDate.now()).getYears())<24){
             StudentChecking studentChecking= new StudentChecking();
             studentChecking.setBalance(checkingAccount.getBalance());
             studentChecking.setStatus(checkingAccount.getStatus());
-            studentChecking.setPrimaryOwner(primaryOwner);
+            studentChecking.setPrimaryOwner(checkingAccount.getPrimaryOwner());
             studentChecking.setSecretKey(checkingAccount.getSecretKey());
 
             return accountRepository.save(studentChecking);
         }else{
             Checking checking = new Checking();
-            checking.setPrimaryOwner(primaryOwner);
+            //-------------primary owner not found-------------------//
+            if(accountHolderRepository.findById(checkingAccount.getPrimaryOwner().getId()).isPresent()){
+                checking.setPrimaryOwner(checkingAccount.getPrimaryOwner());
+            }else{
+                throw new IllegalArgumentException("Primary Owner does not exist");}
 
             //-------------default status active-------------------//
             if(checkingAccount.getStatus() == null)  {
@@ -99,12 +80,12 @@ public class AdminService implements AdminServiceInt {
     //-----------CREATE SAVINGS ACCOUNT--------------------------------------//
     public Account createSavingsAccount(CreateSavingsDTO savingsAccount) {
 
-        //-------------primary owner not found-------------------//
-        AccountHolder primaryOwner = accountHolderRepository.findById(savingsAccount.getPrimaryOwnerId()).orElseThrow(()->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Primary Owner does not exist"));
-
         Savings savings = new Savings();
-        savings.setPrimaryOwner(primaryOwner);
+        //-------------primary owner not found-------------------//
+        if(accountHolderRepository.findById(savingsAccount.getPrimaryOwner().getId()).isPresent()){
+            savings.setPrimaryOwner(savingsAccount.getPrimaryOwner());
+        }else{
+            throw new IllegalArgumentException("Primary Owner does not exist");}
 
         //-------------accepted values for interest rate--------------------//
         if(savingsAccount.getInterestRate() == null){
@@ -137,14 +118,14 @@ public class AdminService implements AdminServiceInt {
         return accountRepository.save(savings);
     }
 
-    //-----------CREATE CREDIT CARD--------------------------------------//
+    //-----------------CREATE CREDIT CARD--------------------------------------//
     public Account createCreditCard(CreateCreditCardDTO creditCardAccount) {
-        //-------------primary owner not found-------------------//
-        AccountHolder primaryOwner = accountHolderRepository.findById(creditCardAccount.getPrimaryOwnerId()).orElseThrow(()->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Primary Owner does not exist"));
-
         CreditCard creditCard = new CreditCard();
-        creditCard.setPrimaryOwner(primaryOwner);
+        //-------------primary owner not found-------------------//
+        if(accountHolderRepository.findById(creditCardAccount.getPrimaryOwner().getId()).isPresent()){
+            creditCard.setPrimaryOwner(creditCardAccount.getPrimaryOwner());
+        }else{
+            throw new IllegalArgumentException("Primary Owner does not exist");}
 
         //-------------accepted values for interest rate--------------------//
         if(creditCardAccount.getInterestRate() == null){
@@ -167,9 +148,9 @@ public class AdminService implements AdminServiceInt {
         }else{
             throw new IllegalArgumentException("Credit limit can not be higher than 100000");
         }
+
         creditCard.setBalance(creditCardAccount.getBalance());
         creditCard.setSecretKey(creditCardAccount.getSecretKey());
-
         return accountRepository.save(creditCard);
     }
 
@@ -180,27 +161,37 @@ public class AdminService implements AdminServiceInt {
         }
     }
 
-    //---------------------UPDATE ACCOUNT----------------------------------//
-    @Override
-    public Account updateAccount(Long id, Account account) {
-        return null;
-    }
-
-
-//---------------------GET BALANCE----------------------------------//
-
-    public BigDecimal getBalance(Long id) {
-        return null;
-    }
-
     //---------------------SET BALANCE----------------------------------//
-    public BigDecimal setBalance(Long id, BigDecimal balance) {
-        return null;
+    public Account setBalance(Long id, BigDecimal balance) {
+
+        if (accountRepository.findById(id).isPresent()){
+            Account account = accountRepository.findById(id).get();
+            account.setBalance(balance);
+            return  accountRepository.save(account);
+        }
+        throw new IllegalArgumentException("Account not found");
     }
 
-    //---------------------GET ACCOUNT----------------------------------//
-    @Override
-    public Account findAccountById(Long id) {
-        return null;
+    //---------------------GET ACCOUNT BY ID----------------------------------//
+     public Account findAccountById(Long id) {
+         if (accountRepository.findById(id).isPresent()){
+            return  accountRepository.findById(id).get();
+    }  throw new IllegalArgumentException("Account not found");
+     }
+
+    //---------------------GET BALANCE----------------------------------//
+    public BigDecimal getBalance(Long id) {
+        if (accountRepository.findById(id).isPresent()) {
+            Account account = accountRepository.findById(id).get();
+            return account.getBalance();
+        }
+        throw  new IllegalArgumentException("Account not found");
     }
-}
+
+
+    public Account saveAccount(Account account) {
+        return accountRepository.save(account);
+    }
+    }
+
+
