@@ -3,9 +3,9 @@ package com.ironhack.backendProject.services.user;
 import com.ironhack.backendProject.dto.CreateCheckingAccountDTO;
 import com.ironhack.backendProject.dto.CreateCreditCardDTO;
 import com.ironhack.backendProject.dto.CreateSavingsDTO;
+import com.ironhack.backendProject.dto.UpdateAccountDTO;
 import com.ironhack.backendProject.enums.Status;
 import com.ironhack.backendProject.models.account.*;
-import com.ironhack.backendProject.models.user.AccountHolder;
 import com.ironhack.backendProject.repositories.account.AccountRepository;
 import com.ironhack.backendProject.repositories.user.AccountHolderRepository;
 import com.ironhack.backendProject.services.account.AccountService;
@@ -24,17 +24,15 @@ public class AdminService implements AdminServiceInt {
 
     @Autowired
     AccountRepository accountRepository;
-
     @Autowired
     AccountHolderRepository accountHolderRepository;
-
     @Autowired
     AccountService accountService;
 
-//-----------------------------ACCOUNTS-----------------------------------------------//
-//-------------------------GET ALL ACCOUNTS--------------------------------------//
-public List<Account> getAllAccounts() {
-    return accountRepository.findAll();
+//------------------------------------ACCOUNTS-----------------------------------------------//
+//----------------------------------GET ALL ACCOUNTS--------------------------------------//
+    public List<Account> getAllAccounts() {
+             return accountRepository.findAll();
 }
 
     //-------------------------CREATE ACCOUNTS-----------------------------------------//
@@ -81,17 +79,17 @@ public List<Account> getAllAccounts() {
         }
     }
 
-    //-----------CREATE SAVINGS ACCOUNT--------------------------------------//
+    //----------------------------CREATE SAVINGS ACCOUNT--------------------------------------//
     public Account createSavingsAccount(CreateSavingsDTO savingsAccount) {
 
         Savings savings = new Savings();
-        //-------------primary owner not found-------------------//
+        //---------------------------primary owner not found-------------------//
         if(accountHolderRepository.findById(savingsAccount.getPrimaryOwner().getId()).isPresent()){
             savings.setPrimaryOwner(savingsAccount.getPrimaryOwner());
         }else{
             throw new IllegalArgumentException("Primary Owner does not exist");}
 
-        //-------------accepted values for interest rate--------------------//
+        //---------------accepted values for interest rate--------------------//
         if(savingsAccount.getInterestRate() == null){
             savings.setInterestRate(BigDecimal.valueOf(0.0025));
         }else if (savingsAccount.getInterestRate().compareTo(BigDecimal.valueOf(0.5)) <= 0) {
@@ -100,16 +98,16 @@ public List<Account> getAllAccounts() {
             throw new IllegalArgumentException("Interest Rate can't be higher than 0.5");
         }
 
-        //-------------accepted values for minimum balance--------------------//
+        //---------------accepted values for minimum balance--------------------//
         if(savingsAccount.getMinimumBalance() == null){
-            savings.setMinimumBalance(BigDecimal.valueOf(1000));
+            savings.setMinimumBalance(new BigDecimal(1000));
         }else if(savingsAccount.getMinimumBalance().compareTo(new BigDecimal(100)) > 0){
             savings.setMinimumBalance(savingsAccount.getMinimumBalance());
         } else{
             throw new IllegalArgumentException("Minimum balance can't be lower than 100");
         }
 
-        //-------------default status active-------------------//
+        //-----------------------default status active-------------------------//
         if(savingsAccount.getStatus() == null)  {
             savings.setStatus(Status.ACTIVE);
         }else{
@@ -122,9 +120,10 @@ public List<Account> getAllAccounts() {
         return accountRepository.save(savings);
     }
 
-    //-----------------CREATE CREDIT CARD--------------------------------------//
+    //-----------------------------CREATE CREDIT CARD--------------------------------------//
     public Account createCreditCard(CreateCreditCardDTO creditCardAccount) {
         CreditCard creditCard = new CreditCard();
+
         //-------------primary owner not found-------------------//
         if(accountHolderRepository.findById(creditCardAccount.getPrimaryOwner().getId()).isPresent()){
             creditCard.setPrimaryOwner(creditCardAccount.getPrimaryOwner());
@@ -141,7 +140,7 @@ public List<Account> getAllAccounts() {
             throw new IllegalArgumentException("Interest rate can't be lower than 0.1");
         }
 
-        //-------------accepted values for credit limit--------------------//
+        //-------------------accepted values for credit limit----------------------------//
 
         if(creditCardAccount.getCreditLimit() == null){
             creditCard.setCreditLimit(BigDecimal.valueOf(100));
@@ -158,46 +157,57 @@ public List<Account> getAllAccounts() {
         return accountRepository.save(creditCard);
     }
 
-    //----------------DELETE ACCOUNT----------------------------------//
+    //------------------------DELETE ACCOUNT----------------------------------//
     public void deleteAccountById(Long id) {
         if(accountRepository.findById(id).isPresent()){
             accountRepository.deleteById(id);
         }
     }
 
-    //---------------------SET BALANCE----------------------------------//
+    //--------------------------SET BALANCE----------------------------------//
     public Account setBalance(Long id, BigDecimal balance) {
 
         if (accountRepository.findById(id).isPresent()){
             Account account = accountRepository.findById(id).get();
+            account.setBalance(balance);
+            accountService.applyPenaltyFee(account);
             account.setBalance(balance);
             return  accountRepository.save(account);
         }
         throw new IllegalArgumentException("Account not found");
     }
 
-    //---------------------GET ACCOUNT BY ID----------------------------------//
+    //------------------------GET ACCOUNT BY ID----------------------------------//
      public Account findAccountById(Long id) {
          if (accountRepository.findById(id).isPresent()){
+             accountService.checkInterestByAccount(accountRepository.findById(id).get());
+             accountService.checkMaintenance(accountRepository.findById(id).get());
+             accountService.applyPenaltyFee(accountRepository.findById(id).get());
             return  accountRepository.findById(id).get();
     }  throw new IllegalArgumentException("Account not found");
      }
 
-    //---------------------GET BALANCE----------------------------------//
+    //--------------------------GET BALANCE----------------------------------//
     public BigDecimal getBalance(Long id) {
         if (accountRepository.findById(id).isPresent()) {
             Account account = accountRepository.findById(id).get();
             accountService.checkInterestByAccount(account);
             accountService.checkMaintenance(account);
+            accountService.applyPenaltyFee(account);
             return account.getBalance();
         }
         throw  new IllegalArgumentException("Account not found");
     }
 
-
-    public Account saveAccount(Account account) {
-        return accountRepository.save(account);
-    }
-    }
+    //------------------------------UPDATE ACCOUNT----------------------------------//
+    public Account updateAccount(Long id, UpdateAccountDTO accountDTO) {
+          Account account = accountRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Account not found"));
+          account.setId(id);
+          accountService.checkInterestByAccount(account);
+          accountService.checkMaintenance(account);
+          accountService.applyPenaltyFee(account);
+          return accountRepository.save(account);
+        }
+  }
 
 

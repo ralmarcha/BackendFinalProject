@@ -1,14 +1,12 @@
 package com.ironhack.backendProject.services.account;
 
-import com.ironhack.backendProject.models.account.Account;
-import com.ironhack.backendProject.models.account.Checking;
-import com.ironhack.backendProject.models.account.CreditCard;
-import com.ironhack.backendProject.models.account.Savings;
+import com.ironhack.backendProject.models.account.*;
 import com.ironhack.backendProject.repositories.account.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -30,9 +28,9 @@ public class AccountService {
                 Period period = Period.between(account.getLastUpdateDate(), LocalDate.now());
 
                 if(period.getMonths()>=1){
-                    account.setBalance(account.getBalance().multiply(((CreditCard) account).
-                            getInterestRate().divide(BigDecimal.valueOf(12)).multiply(BigDecimal.valueOf(period.getMonths()))));
-
+                BigDecimal monthlyInterest = ((CreditCard) account).getInterestRate().divide(new BigDecimal("12"),2,RoundingMode.HALF_EVEN);
+                BigDecimal totalInterest = monthlyInterest.multiply(BigDecimal.valueOf(period.getMonths()));
+                account.setBalance(account.getBalance().multiply(totalInterest));
                     accountRepository.save(account);
 
             }    }
@@ -43,11 +41,43 @@ public class AccountService {
             if (account instanceof Checking){
                 Period period = Period.between(account.getLastUpdateDate(), LocalDate.now());
                 if(period.getMonths()>=1){
-                    account.setBalance(account.getBalance().add(((Checking) account).getMonthlyMaintenanceFee()).multiply(BigDecimal.valueOf(period.getMonths())));
+                    account.setBalance(account.getBalance().add(((Checking) account).getMonthlyMaintenanceFee()).
+                            multiply(BigDecimal.valueOf(period.getMonths())).setScale(2, RoundingMode.HALF_EVEN));
+                    accountRepository.save(account);
                 }
         }
         }
-    }
+ //-------------------------------PENALTY FEE--------------------------//
+        public void applyPenaltyFee(Account account){
+            if (account instanceof Checking){
+                if(account.getBalance().compareTo(((Checking) account).getMinimumBalance())<0){
+                    account.setBalance(account.getBalance().subtract(account.getPENALTY_FEE()));
+                    accountRepository.save(account);
+                }
+            }
+            if (account instanceof Savings){
+                if(account.getBalance().compareTo(((Savings) account).getMinimumBalance())<0){
+                    account.setBalance(account.getBalance().subtract(account.getPENALTY_FEE()));
+                }
+            }
+            if (account instanceof CreditCard){
+                if(account.getBalance().compareTo(new BigDecimal("0"))<0){
+                   account.setBalance(account.getBalance().subtract(account.getPENALTY_FEE())) ;
+                }
+            }
+                        if(account instanceof StudentChecking){
+                if(account.getBalance().compareTo(new BigDecimal("0"))<0){
+                account.setBalance(account.getBalance().subtract(account.getPENALTY_FEE())) ;
+                }
+            }
+        }
+    //---------------------------------------save account-------------------------------//
+            public Account saveAccount(Account account) {
+                    return accountRepository.save(account);
+       }
+}
+
+
 
 
 

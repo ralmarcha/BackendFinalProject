@@ -1,21 +1,24 @@
 package com.ironhack.backendProject.models.user;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class ThirdParty extends User{
+@AllArgsConstructor
+public class ThirdParty {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
 
     @NotEmpty
     private String hashKey;
 
-    public ThirdParty(String username, String password) {
-        super(username, password);
-    }
+    @NotEmpty
+    private String name;
+
 }

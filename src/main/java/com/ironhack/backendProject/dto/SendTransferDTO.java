@@ -3,6 +3,8 @@ package com.ironhack.backendProject.dto;
 import jakarta.validation.constraints.Digits;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -10,7 +12,7 @@ import lombok.*;
 @EqualsAndHashCode
 public class SendTransferDTO {
     private Long accountId;
-    @Digits(integer = 6, fraction = 2)
-    private double amount;
+    @Digits(integer = 9, fraction = 2)
+    private BigDecimal amount;
 
 }

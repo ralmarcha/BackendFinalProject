@@ -1,36 +1,32 @@
 package com.ironhack.backendProject.models.account;
 
-import com.ironhack.backendProject.models.user.User;
+import com.ironhack.backendProject.models.user.AccountHolder;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.Digits;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class CreditCard extends Account {
     @Digits(integer=1, fraction=4)
     private BigDecimal interestRate ;
+    @Digits(integer=9, fraction=2)
     private BigDecimal creditLimit;
 
-    public CreditCard(String secretKey, BigDecimal balance, User primaryOwner, String secondaryOwner,
+    public CreditCard(String secretKey, BigDecimal balance, AccountHolder primaryOwner, AccountHolder secondaryOwner,
                       BigDecimal interestRate, BigDecimal creditLimit) {
         super(secretKey, balance, primaryOwner, secondaryOwner);
         setInterestRate(interestRate);
         setCreditLimit(creditLimit);
     }
-    @Override
-    public void setBalance(BigDecimal balance) {
-        if(balance.compareTo(BigDecimal.valueOf(0))<0){
-            super.setBalance(balance.subtract(super.getPENALTY_FEE())) ;
-        }else{
-            super.setBalance(balance);
-        }
-    }
+
   }

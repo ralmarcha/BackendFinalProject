@@ -4,12 +4,11 @@ import com.ironhack.backendProject.models.user.AccountHolder;
 import com.ironhack.backendProject.models.user.Admin;
 import com.ironhack.backendProject.models.user.ThirdParty;
 import com.ironhack.backendProject.models.user.User;
-import com.ironhack.backendProject.services.interfaces.UserServiceInt;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
-public class UserService implements UserServiceInt {
+public class UserService {
 
     @Override
     public List<User> getAllUsers() {

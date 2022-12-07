@@ -1,38 +1,30 @@
 package com.ironhack.backendProject.models.account;
 
 import com.ironhack.backendProject.enums.Status;
-import com.ironhack.backendProject.models.user.User;
+import com.ironhack.backendProject.models.user.AccountHolder;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.Digits;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class StudentChecking extends Account{
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    public StudentChecking(String secretKey, BigDecimal balance, User primaryOwner, String secondaryOwner,
-                          Status status) {
+    public StudentChecking(String secretKey, BigDecimal balance, AccountHolder primaryOwner, AccountHolder secondaryOwner,
+                           Status status) {
         super(secretKey, balance, primaryOwner, secondaryOwner);
         this.status = status;
     }
 
-    @Override
-    public void setBalance(BigDecimal balance) {
-        if(balance.compareTo(BigDecimal.valueOf(0))<0){
-            super.setBalance(balance.subtract(super.getPENALTY_FEE())) ;
-        }else{
-            super.setBalance(balance);
-        }
     }
-}

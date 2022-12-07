@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 public interface AccountHolderInt {
 
    BigDecimal checkBalance(Long accountId, Long id);
-   Transaction transfer (Long originAccountId, Long destinationAccountId, BigDecimal amount);
+   Transaction transfer (AccountHolderTransferDTO transferDTO);
+
 
 }

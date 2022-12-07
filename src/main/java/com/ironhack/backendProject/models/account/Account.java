@@ -5,10 +5,11 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.ironhack.backendProject.LocalDateDeserializer;
 import com.ironhack.backendProject.LocalDateSerializer;
-import com.ironhack.backendProject.models.user.User;
+import com.ironhack.backendProject.models.user.AccountHolder;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,6 +23,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public abstract class Account {
 
 @Id
@@ -35,9 +37,11 @@ private BigDecimal balance;
 
 @ManyToOne
 @JoinColumn
-private User primaryOwner;
+private AccountHolder primaryOwner;
 
-private String secondaryOwner;
+@ManyToOne
+@JoinColumn(name = "secondary_owner_id")
+private AccountHolder secondaryOwner;
 
 private final BigDecimal PENALTY_FEE = BigDecimal.valueOf(40);
 
@@ -47,7 +51,7 @@ private LocalDate creationDate = LocalDate.now();
 
 @JsonDeserialize(using = LocalDateDeserializer.class)
 @JsonSerialize(using = LocalDateSerializer.class)
-private LocalDate lastUpdateDate = LocalDate.now();
+private LocalDate lastUpdateDate= LocalDate.now();
 
 @JsonIgnore
 @OneToMany(mappedBy = "originAccount", fetch = FetchType.EAGER)
@@ -56,7 +60,7 @@ List<Transaction> transfersSent;
 @JsonIgnore
 @OneToMany(mappedBy = "destinationAccount", fetch = FetchType.EAGER)
 List<Transaction> transfersReceived;
-public Account(String secretKey, BigDecimal balance, User primaryOwner, String secondaryOwner) {
+public Account(String secretKey, BigDecimal balance, AccountHolder primaryOwner, AccountHolder secondaryOwner) {
         this.secretKey = secretKey;
         this.balance = balance;
         this.primaryOwner = primaryOwner;

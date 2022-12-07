@@ -3,6 +3,7 @@ package com.ironhack.backendProject.controllers;
 import com.ironhack.backendProject.dto.CreateCheckingAccountDTO;
 import com.ironhack.backendProject.dto.CreateCreditCardDTO;
 import com.ironhack.backendProject.dto.CreateSavingsDTO;
+import com.ironhack.backendProject.dto.UpdateAccountDTO;
 import com.ironhack.backendProject.models.account.Account;
 import com.ironhack.backendProject.services.user.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,5 +69,12 @@ public class AdminController {
     @ResponseStatus(HttpStatus.OK)
     public Account setBalance(@PathVariable Long id, @RequestParam BigDecimal balance) {
         return adminService.setBalance(id,balance);
+    }
+
+    //------------------------------UPDATE ACCOUNT----------------------------------//
+    @PutMapping("/update-checking-account/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Account updateAccount(@PathVariable Long id, @RequestBody UpdateAccountDTO accountDTO){
+        return adminService.updateAccount(id,accountDTO);
     }
 }

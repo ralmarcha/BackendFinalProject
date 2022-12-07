@@ -3,6 +3,8 @@ package com.ironhack.backendProject.dto;
 import jakarta.validation.constraints.Digits;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,6 +16,6 @@ public class ReceiveTransferDTO {
 
     private String secretKey;
 
-    @Digits(integer = 6, fraction = 2)
-    private double amount;
+    @Digits(integer = 9, fraction = 2)
+    private BigDecimal amount;
 }

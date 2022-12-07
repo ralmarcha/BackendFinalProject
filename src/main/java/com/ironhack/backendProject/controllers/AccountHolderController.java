@@ -22,11 +22,12 @@ public class AccountHolderController {
     public BigDecimal checkBalance(@RequestParam Long accountId, @RequestParam Long userId){
             return accountHolderService.checkBalance(accountId, userId);
     }
+
 //------------------------------TRANSFER-----------------------------------//
-    @PostMapping("/transfer/{id}")
+    @PostMapping("/transfer")
     @ResponseStatus(HttpStatus.OK)
-    public Transaction transfer (@PathVariable(name="id") Long originAccountId, @RequestParam Long destinationAccountId,@RequestParam BigDecimal amount) {
-        return accountHolderService.transfer(originAccountId, destinationAccountId, amount);
+    public Transaction transfer(@RequestBody  AccountHolderTransferDTO transferDTO) {
+        return accountHolderService.transfer(transferDTO);
     }
 
 }

@@ -3,9 +3,9 @@ package com.ironhack.backendProject.services.user;
 import com.ironhack.backendProject.models.user.ThirdParty;
 import com.ironhack.backendProject.repositories.user.ThirdPartyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class ThirdPartyService {
@@ -13,12 +13,11 @@ public class ThirdPartyService {
     ThirdPartyRepository thirdPartyRepository;
 
 
-    //--------------------------GET HASHED KEY---------------------------------------//
+    //--------------------------GET THIRD PARTY BY HASHED KEY--------------------------------//
     public ThirdParty getThirdPartyByHashKey(String hashKey) {
-        Optional<ThirdParty> thirdParty = thirdPartyRepository.findByHashKey(hashKey);
-        if (!thirdParty.isPresent()) {
-            throw new IllegalArgumentException("Hash key not found");
-        }
-        return thirdParty.get();
+        ThirdParty thirdParty = thirdPartyRepository.findByHashKey(hashKey).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Hash key not found"));
+        return thirdParty;
     }
 }
+

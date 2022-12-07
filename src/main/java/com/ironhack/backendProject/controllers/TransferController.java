@@ -1,6 +1,5 @@
 package com.ironhack.backendProject.controllers;
 
-import com.ironhack.backendProject.dto.AccountHolderTransferDTO;
 import com.ironhack.backendProject.dto.ReceiveTransferDTO;
 import com.ironhack.backendProject.dto.SendTransferDTO;
 import com.ironhack.backendProject.models.account.Transaction;
@@ -16,15 +15,14 @@ public class TransferController {
     @Autowired
     TransferService transferService;
 
+    //----------------------THIRD PARTY SEND TRANSFER--------------------------------//
     @PostMapping("/transfer/send")
-    public Transaction sendTransfer(@RequestBody SendTransferDTO sendTransferDTO) {
-        return transferService.sendTransfer(sendTransferDTO);
+    public Transaction sendTransfer(@RequestHeader("hash-key") String hashKey, @RequestBody SendTransferDTO sendTransferDTO) {
+        return transferService.sendTransfer(hashKey,sendTransferDTO);
     }
-
+    //----------------------THIRD PARTY RECEIVE TRANSFER--------------------------------//
     @PostMapping("/transfer/receive")
     public Transaction receiveTransfer(@RequestHeader("hash-key") String hashKey, @RequestBody ReceiveTransferDTO receiveTransferDTO) {
         return transferService.receiveTransfer(hashKey, receiveTransferDTO);
     }
-
-
 }

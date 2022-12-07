@@ -1,6 +1,5 @@
 package com.ironhack.backendProject.services.account;
 
-import com.ironhack.backendProject.dto.AccountHolderTransferDTO;
 import com.ironhack.backendProject.dto.ReceiveTransferDTO;
 import com.ironhack.backendProject.dto.SendTransferDTO;
 import com.ironhack.backendProject.models.account.Transaction;
@@ -12,12 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Service
 public class TransferService {
     @Autowired
     TransactionRepository transactionRepository;
+
+    @Autowired
+    AccountService accountService;
 
     @Autowired
     AdminService adminService;
@@ -26,21 +27,21 @@ public class TransferService {
     ThirdPartyService thirdPartyService;
 
     //-----------------------------------THIRD PARTY SEND TRANSFER----------------------------//
-    public Transaction sendTransfer(SendTransferDTO sendTransferDTO) {
+    public Transaction sendTransfer(String hashKey,SendTransferDTO sendTransferDTO) {
+        thirdPartyService.getThirdPartyByHashKey(hashKey);
 
         Account account = adminService.findAccountById(sendTransferDTO.getAccountId());
-        if (account.getBalance().compareTo(BigDecimal.valueOf(sendTransferDTO.getAmount())) < 0) {
+        if (account.getBalance().compareTo(sendTransferDTO.getAmount()) < 0) {
             throw new IllegalArgumentException("Insufficient balance");
         }
 
-        BigDecimal accountBalance = account.getBalance().subtract(BigDecimal.valueOf(sendTransferDTO.getAmount()));
+        BigDecimal accountBalance = account.getBalance().subtract(sendTransferDTO.getAmount());
         account.setBalance(accountBalance);
-        adminService.saveAccount(account);
+        accountService.saveAccount(account);
 
-        Transaction transfer = new Transaction( null, account, BigDecimal.valueOf(sendTransferDTO.getAmount()));
+        Transaction transfer = new Transaction( null, account, sendTransferDTO.getAmount());
         return transactionRepository.save(transfer);
     }
-
 
 
 //-----------------------------------THIRD PARTY RECEIVE TRANSFER----------------------------//
@@ -51,15 +52,15 @@ public class TransferService {
 
         Account account = adminService.findAccountById(receiveTransferDTO.getAccountId());
 
-        if (account.getSecretKey() != receiveTransferDTO.getSecretKey()){
+        if (!account.getSecretKey().equals(receiveTransferDTO.getSecretKey())){
             throw new IllegalArgumentException("secret key not found");
         }
 
-        BigDecimal accountBalance = account.getBalance().add(BigDecimal.valueOf(receiveTransferDTO.getAmount()));
+        BigDecimal accountBalance = account.getBalance().add(receiveTransferDTO.getAmount());
         account.setBalance(accountBalance);
-        adminService.saveAccount(account);
+        accountService.saveAccount(account);
 
-       Transaction transfer = new Transaction( account, null,  BigDecimal.valueOf(receiveTransferDTO.getAmount()));
+       Transaction transfer = new Transaction( account, null,  receiveTransferDTO.getAmount());
         return transactionRepository.save(transfer);
     }
 

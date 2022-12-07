@@ -18,6 +18,8 @@ public class AccountHolderTransferDTO {
 
     private Long destinationAccountId;
 
-      private double amount;
+    @Digits(integer=9, fraction= 2)
+    private BigDecimal amount;
 
+    private String senderName;
 }
