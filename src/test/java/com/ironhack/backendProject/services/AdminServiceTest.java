@@ -1,6 +1,5 @@
 package com.ironhack.backendProject.services;
 
-import com.ironhack.backendProject.dto.CreateAccountDTO;
 import com.ironhack.backendProject.dto.CreateCheckingAccountDTO;
 import com.ironhack.backendProject.dto.CreateCreditCardDTO;
 import com.ironhack.backendProject.dto.CreateSavingsDTO;
@@ -8,9 +7,11 @@ import com.ironhack.backendProject.enums.Status;
 import com.ironhack.backendProject.models.account.*;
 import com.ironhack.backendProject.models.embeddeds.PrimaryAddress;
 import com.ironhack.backendProject.models.user.AccountHolder;
+import com.ironhack.backendProject.repositories.account.AccountRepository;
 import com.ironhack.backendProject.repositories.user.AccountHolderRepository;
 import com.ironhack.backendProject.services.account.AccountService;
 import com.ironhack.backendProject.services.user.AdminService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,22 +31,20 @@ public class AdminServiceTest {
     AccountHolderRepository accountHolderRepository;
     @Autowired
     AccountService accountService;
+@Autowired
+    AccountRepository accountRepository;
+    private Throwable exception;
 
-    @BeforeEach
-    void setUp() {
-
-    }
 
    //-----------create checkingAccount when age>24----------------//
    @Test
    public void shouldCreateCheckingAccount_whenAgeUpper(){
-       PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
+      PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
        LocalDate date = LocalDate.of(2002,1,1);
        AccountHolder accountHolder = new AccountHolder("Raquel","123",date, address, null);
        accountHolderRepository.save(accountHolder);
       CreateCheckingAccountDTO createAccountDTO = new CreateCheckingAccountDTO("aaa", new BigDecimal(500), accountHolder);
        Account result = adminService.createCheckingAccount(createAccountDTO);
-
       assertTrue(result instanceof Checking);
    }
 
@@ -131,5 +130,20 @@ public class AdminServiceTest {
 
         assertThrows(IllegalArgumentException.class, () -> {adminService.createSavingsAccount(createSavings);});
     }
+    //-------------------------GET ACCOUNT BY ID----------------------------//
 
+    @Test
+    public void getAccount_whenId(){
+        PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
+        LocalDate date = LocalDate.of(2002,1,1);
+        AccountHolder accountHolder = new AccountHolder("Raquel","123",date, address, null);
+        accountHolderRepository.save(accountHolder);
+
+        Account account1 = new Checking("abc", new BigDecimal(1000), accountHolder,null, Status.ACTIVE);
+     accountRepository.save(account1);
+    assertEquals(1, account1.getId());
+
+    }
+
+   // @Test
 }
