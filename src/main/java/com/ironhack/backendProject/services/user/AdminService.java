@@ -1,13 +1,10 @@
 package com.ironhack.backendProject.services.user;
 
-import com.ironhack.backendProject.dto.CreateCheckingAccountDTO;
-import com.ironhack.backendProject.dto.CreateCreditCardDTO;
-import com.ironhack.backendProject.dto.CreateSavingsDTO;
-import com.ironhack.backendProject.dto.UpdateAccountDTO;
+import com.ironhack.backendProject.dto.*;
 import com.ironhack.backendProject.enums.Status;
 import com.ironhack.backendProject.models.account.*;
 import com.ironhack.backendProject.repositories.account.AccountRepository;
-import com.ironhack.backendProject.repositories.user.AccountHolderRepository;
+import com.ironhack.backendProject.repositories.user.*;
 import com.ironhack.backendProject.services.account.AccountService;
 import com.ironhack.backendProject.services.interfaces.AdminServiceInt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -208,6 +205,7 @@ public class AdminService implements AdminServiceInt {
           accountService.applyPenaltyFee(account);
           return accountRepository.save(account);
         }
-  }
+
+}
 
 

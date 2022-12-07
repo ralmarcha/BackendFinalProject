@@ -8,12 +8,7 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-public class ThirdParty {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+public class ThirdParty extends User{
 
     @NotEmpty
     private String hashKey;
@@ -21,4 +16,8 @@ public class ThirdParty {
     @NotEmpty
     private String name;
 
+    public ThirdParty(String hashKey, String name) {
+        this.hashKey = hashKey;
+        this.name = name;
+    }
 }

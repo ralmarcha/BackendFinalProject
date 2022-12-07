@@ -22,8 +22,6 @@ public interface AdminServiceInt {
     Account setBalance(Long id,BigDecimal balance);
     Account findAccountById(Long id);
     Account updateAccount(Long id, UpdateAccountDTO accountDTO);
-    AccountHolder createAccountHolder(CreateAccountHolderDTO accountHolderDTO);
-    ThirdParty createThirdParty(CreateThirdPartyDTO createThirdPartyDTO);
-    Admin createAdmin(CreateAdminDTO adminDTO);
-    List<User> getAllUsers();
+
+
 }
