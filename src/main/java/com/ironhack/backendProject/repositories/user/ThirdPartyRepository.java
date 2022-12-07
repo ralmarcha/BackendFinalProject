@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface ThirdPartyRepository extends JpaRepository<ThirdParty, Long> {
-    Optional<ThirdParty> findByHashKey(String hashKey);
+   Optional<ThirdParty>  findByHashKey(String hashKey);
 }
