@@ -13,6 +13,7 @@ import com.ironhack.backendProject.services.user.AdminService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -148,7 +149,7 @@ public void shouldCreateCheckingAccount_whenAgeUpper(){
         Account account1 = new Checking("abc", new BigDecimal(1000), accountHolder,null, Status.ACTIVE);
         accountRepository.save(account1);
 
-        assertThrows(IllegalArgumentException.class, () -> {adminService.findAccountById(2L);});
+        assertThrows(ResponseStatusException.class, () -> {adminService.findAccountById(2L);});
     }
 
 

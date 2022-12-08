@@ -166,26 +166,29 @@ public class AdminService implements AdminServiceInt {
 
     //--------------------------SET BALANCE----------------------------------//
     public Account setBalance(Long id, BigDecimal balance) {
+accountRepository.findById(id).orElseThrow(()->
+        new ResponseStatusException(HttpStatus.NOT_FOUND,
+                "Account not found"));
 
-        if (accountRepository.findById(id).isPresent()){
             Account account = accountRepository.findById(id).get();
             account.setBalance(balance);
             accountService.applyPenaltyFee(account);
             account.setBalance(balance);
             return  accountRepository.save(account);
-        }
-        throw new IllegalArgumentException("Account not found");
+
     }
 
     //------------------------GET ACCOUNT BY ID----------------------------------//
      public Account findAccountById(Long id) {
-         if (accountRepository.findById(id).isPresent()){
+         accountRepository.findById(id).orElseThrow(()->
+                 new ResponseStatusException(HttpStatus.NOT_FOUND,
+                         "Account not found"));
+
              accountService.checkInterestByAccount(accountRepository.findById(id).get());
              accountService.checkMaintenance(accountRepository.findById(id).get());
              accountService.applyPenaltyFee(accountRepository.findById(id).get());
             return  accountRepository.findById(id).get();
-    }  throw new IllegalArgumentException("Account not found");
-     }
+    }
 
     //--------------------------GET BALANCE----------------------------------//
     public BigDecimal getBalance(Long id) {
