@@ -11,8 +11,6 @@ import com.ironhack.backendProject.repositories.account.AccountRepository;
 import com.ironhack.backendProject.repositories.user.AccountHolderRepository;
 import com.ironhack.backendProject.services.account.AccountService;
 import com.ironhack.backendProject.services.user.AdminService;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,79 +29,77 @@ public class AdminServiceTest {
     AccountHolderRepository accountHolderRepository;
     @Autowired
     AccountService accountService;
-@Autowired
+    @Autowired
     AccountRepository accountRepository;
-    private Throwable exception;
 
 
-   //-----------create checkingAccount when age>24----------------//
-   @Test
-   public void shouldCreateCheckingAccount_whenAgeUpper(){
-      PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
-       LocalDate date = LocalDate.of(2002,1,1);
-       AccountHolder accountHolder = new AccountHolder("Raquel","123",date, address, null);
-       accountHolderRepository.save(accountHolder);
-      CreateCheckingAccountDTO createAccountDTO = new CreateCheckingAccountDTO("aaa", new BigDecimal(500), accountHolder);
-       Account result = adminService.createCheckingAccount(createAccountDTO);
-      assertTrue(result instanceof Checking);
-   }
-
-       //-----------create StudentAccount when age<24----------------//
-   @Test
-   public void shouldCreateStudentAccount_whenAgeLess(){
-           PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
-           LocalDate date = LocalDate.of(2002,1,1);
-           AccountHolder accountHolder = new AccountHolder("Raquel","123",date, address, null);
-           accountHolderRepository.save(accountHolder);
-           CreateCheckingAccountDTO createAccountDTO = new CreateCheckingAccountDTO("aaa", new BigDecimal(500), accountHolder);
-           Account result = adminService.createCheckingAccount(createAccountDTO);
-
-           assertTrue(result instanceof StudentChecking);
-   }
-
-   //-----------------------create Checking Account with default values-------------------//
-   @Test
-   public void createCheckingAccount_shouldShowDefaultValues(){
-       PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
-       LocalDate date = LocalDate.of(1982,5,10);
-       AccountHolder accountHolder = new AccountHolder("Raquel","123",date, address, null);
-       accountHolderRepository.save(accountHolder);
-       CreateCheckingAccountDTO createAccountDTO = new CreateCheckingAccountDTO("aaa", new BigDecimal(500), accountHolder);
-       Checking result = (Checking) adminService.createCheckingAccount(createAccountDTO);
-
-       assertEquals(BigDecimal.valueOf(12).setScale(2),result.getMonthlyMaintenanceFee());
-       assertEquals(BigDecimal.valueOf(250),result.getMinimumBalance());
-
-   }
-
-   //-------------------------CREATE CREDITCARD with default values----------------------------//
+//-----------------------------CREATE CHECKING ACCOUNT WHEN AGE>24------------------------//
 @Test
-     public void createCreditCard_shouldShowDefaultValues(){
+public void shouldCreateCheckingAccount_whenAgeUpper(){
     PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
-    LocalDate date = LocalDate.of(1982,5,10);
+    LocalDate date = LocalDate.of(1982,1,1);
     AccountHolder accountHolder = new AccountHolder("Raquel","123",date, address, null);
     accountHolderRepository.save(accountHolder);
-    CreateCreditCardDTO createCreditCardDTO = new CreateCreditCardDTO("aaa", new BigDecimal(500), accountHolder);
-
-    CreditCard result = (CreditCard) adminService.createCreditCard(createCreditCardDTO);
-
-    assertEquals(BigDecimal.valueOf(0.2),result.getInterestRate());
-    assertEquals(BigDecimal.valueOf(100),result.getCreditLimit());
+    CreateCheckingAccountDTO createAccountDTO = new CreateCheckingAccountDTO("aaa", new BigDecimal(500), accountHolder);
+    Account result = adminService.createCheckingAccount(createAccountDTO);
+    assertTrue(result instanceof Checking);
 }
-    //-------------------------CREATE CREDITCARD when out of accepted values----------------------------//
 
+    //---------------------------CREATE STUDENT ACCOUNT WHEN AGE <24------------------------//
+    @Test
+    public void shouldCreateStudentAccount_whenAgeLess(){
+        PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
+        LocalDate date = LocalDate.of(2002,1,1);
+        AccountHolder accountHolder = new AccountHolder("Raquel","123",date, address, null);
+        accountHolderRepository.save(accountHolder);
+        CreateCheckingAccountDTO createAccountDTO = new CreateCheckingAccountDTO("aaa", new BigDecimal(500), accountHolder);
+        Account result = adminService.createCheckingAccount(createAccountDTO);
+
+        assertTrue(result instanceof StudentChecking);
+    }
+
+    //-------------------------CREATE CHECKING ACCOUNT WITH DEFAULT VALUES--------------------//
+    @Test
+    public void createCheckingAccount_shouldShowDefaultValues(){
+        PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
+        LocalDate date = LocalDate.of(1982,5,10);
+        AccountHolder accountHolder = new AccountHolder("Raquel","123",date, address, null);
+        accountHolderRepository.save(accountHolder);
+        CreateCheckingAccountDTO createAccountDTO = new CreateCheckingAccountDTO("aaa", new BigDecimal(500), accountHolder);
+        Checking result = (Checking) adminService.createCheckingAccount(createAccountDTO);
+
+        assertEquals(BigDecimal.valueOf(12).setScale(2),result.getMonthlyMaintenanceFee());
+        assertEquals(BigDecimal.valueOf(250),result.getMinimumBalance());
+    }
+
+    //-------------------------CREATE CREDITCARD WITH DEFAULT VALUES----------------------------//
+    @Test
+    public void createCreditCard_shouldShowDefaultValues(){
+        PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
+        LocalDate date = LocalDate.of(1982,5,10);
+        AccountHolder accountHolder = new AccountHolder("Raquel","123",date, address, null);
+        accountHolderRepository.save(accountHolder);
+        CreateCreditCardDTO createCreditCardDTO = new CreateCreditCardDTO("aaa", new BigDecimal(500), accountHolder);
+
+        CreditCard result = (CreditCard) adminService.createCreditCard(createCreditCardDTO);
+
+        assertEquals(BigDecimal.valueOf(0.2),result.getInterestRate());
+        assertEquals(BigDecimal.valueOf(100),result.getCreditLimit());
+    }
+
+    //---------------------THROW ERROR CREDITCARD WHEN OUT OF ACCEPTED VALUES-----------------------//
     @Test
     public void createCreditCard_shouldShowError(){
-       PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
-       LocalDate date = LocalDate.of(1982,5,10);
-       AccountHolder accountHolder = new AccountHolder("Raquel","123",date, address, null);
-       accountHolderRepository.save(accountHolder);
-       CreateCreditCardDTO createCreditCardDTO = new CreateCreditCardDTO("aaa", new BigDecimal(500), accountHolder,  BigDecimal.valueOf(0.05).setScale(2),BigDecimal.valueOf(1500000));
+        PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
+        LocalDate date = LocalDate.of(1982,5,10);
+        AccountHolder accountHolder = new AccountHolder("Raquel","123",date, address, null);
+        accountHolderRepository.save(accountHolder);
+        CreateCreditCardDTO createCreditCardDTO = new CreateCreditCardDTO("aaa", new BigDecimal(500), accountHolder,  BigDecimal.valueOf(0.05).setScale(2),BigDecimal.valueOf(1500000));
 
         assertThrows(IllegalArgumentException.class, () -> {adminService.createCreditCard(createCreditCardDTO);});
     }
 
-    //-------------------------CREATE SAVINGS with default values----------------------------//
+    //------------------------------CREATE SAVINGS wWITH DEFAULT VALUES----------------------------//
     @Test
     public void createSavings_shouldShowDefaultValues(){
         PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
@@ -118,8 +114,7 @@ public class AdminServiceTest {
         assertEquals(BigDecimal.valueOf(1000),result.getMinimumBalance());
     }
 
-    //-------------------------CREATE SAVINGS when out of accepted values----------------------------//
-
+    //-------------------------THROW ERROR SAVINGS WHEN OUT OF ACCEPTED VALUES-----------------------//
     @Test
     public void createSavings_shouldShowError(){
         PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
@@ -130,20 +125,35 @@ public class AdminServiceTest {
 
         assertThrows(IllegalArgumentException.class, () -> {adminService.createSavingsAccount(createSavings);});
     }
-    //-------------------------GET ACCOUNT BY ID----------------------------//
 
+    //-------------------------------------------SET BALANCE-----------------------------------//
     @Test
-    public void getAccount_whenId(){
+    public void changeBalance_whenSet(){
         PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
         LocalDate date = LocalDate.of(2002,1,1);
         AccountHolder accountHolder = new AccountHolder("Raquel","123",date, address, null);
         accountHolderRepository.save(accountHolder);
 
         Account account1 = new Checking("abc", new BigDecimal(1000), accountHolder,null, Status.ACTIVE);
-     accountRepository.save(account1);
-    assertEquals(1, account1.getId());
-
+        accountRepository.save(account1);
+        account1.setBalance(new BigDecimal(500));
+        assertEquals(new BigDecimal(500), account1.getBalance());
     }
 
-   // @Test
+    //-------------------------------THROW ERROR WHEN ACCOUNT ID NOT FOUND-------------------------//
+    @Test
+    public void getAccount_whenIdNotFound(){
+        PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
+        LocalDate date = LocalDate.of(2002,1,1);
+        AccountHolder accountHolder = new AccountHolder("Raquel","123",date, address, null);
+        accountHolderRepository.save(accountHolder);
+
+        Account account1 = new Checking("abc", new BigDecimal(1000), accountHolder,null, Status.ACTIVE);
+        accountRepository.save(account1);
+
+        assertThrows(IllegalArgumentException.class, () -> {adminService.findAccountById(2L);});
+    }
+
+
 }
+
