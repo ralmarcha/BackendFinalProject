@@ -7,15 +7,14 @@ import com.ironhack.backendProject.models.user.AccountHolder;
 import com.ironhack.backendProject.models.user.Admin;
 import com.ironhack.backendProject.models.user.Role;
 import com.ironhack.backendProject.models.user.ThirdParty;
-import com.ironhack.backendProject.repositories.user.RoleRepository;
-import com.ironhack.backendProject.repositories.user.ThirdPartyRepository;
-import com.ironhack.backendProject.repositories.user.UserRepository;
+import com.ironhack.backendProject.repositories.user.*;
 import com.ironhack.backendProject.services.interfaces.UserServiceInt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
 
 @Service
 public class UserService implements UserServiceInt {
@@ -31,6 +30,7 @@ public class UserService implements UserServiceInt {
 
     @Autowired
     ThirdPartyRepository thirdPartyRepository;
+    @Autowired
 
 
     //------------------------------CREATE ACCOUNT HOLDER----------------------------------//

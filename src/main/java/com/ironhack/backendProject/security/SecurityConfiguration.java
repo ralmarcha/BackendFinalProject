@@ -26,15 +26,23 @@ public class SecurityConfiguration {
         httpSecurity.httpBasic();
 
         httpSecurity.authorizeHttpRequests()
-             //   .requestMatchers(HttpMethod.GET, "/post/{id}").hasAnyRole("ADMIN", "USER", "CONTRIBUTOR")
-              //  .requestMatchers(HttpMethod.GET, "/author/{id}").hasAnyRole("ADMIN", "USER", "CONTRIBUTOR")
-              //  .requestMatchers(HttpMethod.POST, "/post-add").hasAnyRole("ADMIN", "CONTRIBUTOR")
-              //  .requestMatchers(HttpMethod.POST, "/author-add").hasRole("ADMIN")
-              //  .requestMatchers(HttpMethod.PUT, "post/{id}").hasAnyRole("ADMIN", "CONTRIBUTOR")
-              //  .requestMatchers(HttpMethod.PUT, "author/{id}").hasAnyRole("ADMIN", "CONTRIBUTOR")
-              //  .requestMatchers(HttpMethod.DELETE, "/post/{id}").hasRole("ADMIN")
-              //  .requestMatchers(HttpMethod.DELETE, "/author/{id}").hasRole("ADMIN")
-                .anyRequest().permitAll();
+               .requestMatchers(HttpMethod.GET, "/check-user-balance").hasAnyRole("ADMIN", "ACCOUNT_HOLDER" )
+               .requestMatchers(HttpMethod.POST, "/transfer").hasAnyRole("ADMIN", "ACCOUNT_HOLDER")
+               .requestMatchers(HttpMethod.GET, "/accounts").hasRole("ADMIN")
+               .requestMatchers(HttpMethod.POST, "/create-checking-account").hasRole("ADMIN")
+               .requestMatchers(HttpMethod.POST, "/create-savings-account").hasAnyRole("ADMIN")
+               .requestMatchers(HttpMethod.POST, "/create-credit-card").hasAnyRole("ADMIN")
+               .requestMatchers(HttpMethod.DELETE, "/delete-account/{id}").hasRole("ADMIN")
+               .requestMatchers(HttpMethod.GET, "/account/{id}").hasRole("ADMIN")
+               .requestMatchers(HttpMethod.GET, "/check-balance/{id}").hasRole("ADMIN")
+               .requestMatchers(HttpMethod.PATCH, "/set-balance/{id}").hasRole("ADMIN")
+               .requestMatchers(HttpMethod.PUT, "/update-checking-account/{id}").hasRole("ADMIN")
+               .requestMatchers(HttpMethod.POST, "/transfer/send").hasAnyRole("THIRD_PARTY", "ADMIN")
+               .requestMatchers(HttpMethod.POST, "/transfer/receive").hasAnyRole("THIRD_PARTY", "ADMIN")
+               .requestMatchers(HttpMethod.POST, "/create-account-holder").hasRole("ADMIN")
+               .requestMatchers(HttpMethod.POST, "/create-third-party").hasRole("ADMIN")
+               .requestMatchers(HttpMethod.POST, "/create-admin").hasRole("ADMIN")
+               .anyRequest().permitAll();
 
         httpSecurity.csrf().disable();
 
