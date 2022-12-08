@@ -1,23 +1,25 @@
 # Bank BackEnd Project
+
 ## Table of Contents
-1. [General Info](#general-info)
-2. [Account Requirements](#account-requirements)
-3. [User Requirement](#user-requirements)
-4. [Technical Requirement](#technical-requirement)
-5. [Deliverables](#deliverables)
 
-## Requisitos:
+1. [General Info](#general-information)
+2. [User Requirements](#user-requirements)
+3. [End Points](#end-points)
+4. [Class Diagram](#class-diagram)
+5. [Use Case Diagram](#use-case-diagram)
 
-- Tener instalado Java 17.
-- Tener instalado mysql.
-- Crear base de datos: `project`
-- ADMIN user: - username: `admin` , password: `admin`
+## General Information:
 
-## ENDPOINTS
+## User Requirements:
 
-* POST :
+- Database schema: `project`
+- ADMIN user:  username: `admin` , password: `admin`
 
-  > /transfer (Role: "ACCOUNT_HOLDER")
+## END POINTS
+
+***POST :***
+
+  - /transfer *(Role: "ACCOUNT_HOLDER")*
   
 ```
   {
@@ -26,40 +28,38 @@
      "amount": BigDecimal,
      "senderName": String
   }
-  
 ```
-  > /create-checking-account (Role: "ADMIN")
-  > /create-savings-account (Role: "ADMIN")
-  > /create-credit-card (Role: "ADMIN")
+  - /create-checking-account *(Role: "ADMIN")*
+
+  - /create-savings-account *(Role: "ADMIN")*
+
+  - /create-credit-card *(Role: "ADMIN")*
 
 ```
   {
       "secretKey": String,
       "balance": BigDecimal,
       "primaryOwner": AccountHolder 
-  }
-  
+  } 
 ```  
-   > /transfer/send (Role: "THIRD_PARTY")
+   - /transfer/send *(Role: "THIRD_PARTY")*
 
 ```
  {
        "accountId": Long,
        "amount": BigDecimal
  }
-
 ```
-  > /transfer/receive (Role: "THIRD_PARTY")
+  - /transfer/receive *(Role: "THIRD_PARTY")*
 
 ```
 {
        "accountId": Long,
        "secretKey": String,
        "amount": BigDecimal
-}
-  
+} 
 ```
-  > /create-account-holder (Role: "ADMIN")
+  - /create-account-holder *(Role: "ADMIN")*
 
 ```
 {
@@ -68,36 +68,36 @@
        "address": PrimaryAddress,
        "dateOfBirth": LocalDate
 }
-  
 ```
-  > /create-third-party (Role: "ADMIN")
+  - /create-third-party *(Role: "ADMIN")*
 ```
 {
        "hashKey": String,
        "name": String,
 }
-  
 ```
-  > /create-admin (Role: "ADMIN")
+  - /create-admin *(Role: "ADMIN")*
 ```
 {
        "username": String,
        "password": String,
 }
-  
 ```
 
-  * GET :
-  > /check-user-balance (Role: "ACCOUNT_HOLDER")
+***GET :***
+
+  - /check-user-balance *(Role: "ACCOUNT_HOLDER")*
     @RequestParam Long accountId, @RequestParam Long userId
 
-  > /check-balance/{id} (Role: "ADMIN")
-  > /accounts (Roles: "ADMIN", "ACCOUNT_HOLDER")
+  - /check-balance/{id} *(Role: "ADMIN")*
   
-  > /account/{id} (Roles: "ADMIN", "ACCOUNT_HOLDER")
+  - /accounts *(Roles: "ADMIN", "ACCOUNT_HOLDER")*
   
-* PUT :
-  > /update-checking-account/{id} (Role: "ADMIN")
+  - /account/{id} *(Roles: "ADMIN", "ACCOUNT_HOLDER")*
+
+***PUT***
+
+  - /update-checking-account/{id} *(Role: "ADMIN")*
 
 ```
 {
@@ -107,14 +107,15 @@
     "creationDate": LocalDate,
     "secondaryOwner": AccountHolder
 }
-
 ```
 
-* PATCH :
-  > /set-balance/{id} (Role: "ADMIN")
-  "balance": BigDecimal
-* DELETE :
-  > /delete-account/{id} (Role: "ADMIN")
+***PATCH***
+
+  - /set-balance/{id} *(Role: "ADMIN")*
+    @RequestParam BigDecimal balance
+***DELETE***
+
+  - /delete-account/{id} *(Role: "ADMIN")*
 
 
 ## Class Diagram
