@@ -7,33 +7,45 @@ import com.ironhack.backendProject.dto.accounts.UpdateAccountDTO;
 import com.ironhack.backendProject.models.account.Account;
 import com.ironhack.backendProject.models.user.Role;
 import com.ironhack.backendProject.models.user.User;
+import com.ironhack.backendProject.repositories.user.UserRepository;
 import com.ironhack.backendProject.security.CustomUserDetails;
+import com.ironhack.backendProject.services.account.AccountService;
 import com.ironhack.backendProject.services.user.AdminService;
 import com.ironhack.backendProject.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class AdminController {
     @Autowired
     AdminService adminService;
     @Autowired
-    UserService userService;
+    AccountService accountService;
+    @Autowired
+    UserRepository userRepository;
 
 
     //-------------------------------------GET ALL ACCOUNTS------------------------------------------------//
     @GetMapping("/accounts")
     public List<Account> getAccounts(@AuthenticationPrincipal CustomUserDetails customUserDetails){
-     Role role = (Role) customUserDetails.getAuthorities();
-        if (role.getRole() == ROLE_ADMIN) {
-            return adminService.getAllAccounts();
-        }
-        return adminService.getAccountsByUserId(role.getId());
+      //  return adminService.getAllAccounts();
+      String username = customUserDetails.getUsername();
+      User user = userRepository.findByUsername(username).orElseThrow(()->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND,"User not found"));
+      /*if (user.getRole() == "ROLE_ADMIN"){
+          return adminService.getAllAccounts();
+      }else{*/
+          return accountService.getAccountsByUsername(username);
+     // }
     }
 
     //--------------------------------------CREATE ACCOUNTS------------------------------------------------//
@@ -65,7 +77,7 @@ public class AdminController {
     //----------------------------------------GET ACCOUNT--------------------------------------------------//
     @GetMapping("/account/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Account findAccountById(@AuthenticationPrincipal CustomUserDetails customUserDetails,@PathVariable Long id) {
+    public Account findAccountById(@PathVariable Long id) {
         return adminService.findAccountById(id);
     }
 

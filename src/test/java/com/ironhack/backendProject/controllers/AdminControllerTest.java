@@ -7,8 +7,10 @@ import com.ironhack.backendProject.dto.accounts.CreateSavingsDTO;
 import com.ironhack.backendProject.models.account.Account;
 import com.ironhack.backendProject.models.embeddeds.PrimaryAddress;
 import com.ironhack.backendProject.models.user.AccountHolder;
+import com.ironhack.backendProject.models.user.User;
 import com.ironhack.backendProject.repositories.account.AccountRepository;
 import com.ironhack.backendProject.repositories.user.AccountHolderRepository;
+import com.ironhack.backendProject.repositories.user.UserRepository;
 import com.ironhack.backendProject.services.user.AdminService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -42,7 +45,8 @@ public class AdminControllerTest {
 
     @Autowired
     AccountRepository accountRepository;
-
+   @Autowired
+    UserRepository userRepository;
     @Autowired
     AdminService adminService;
     MockMvc mockMvc;
@@ -70,7 +74,27 @@ public class AdminControllerTest {
                 .andReturn();
         assertEquals(2, accountRepository.findAll().size());
     }
+    //-------------------------------------GET ALL ACCOUNTS AUTHORIZED-------------------------------------------------//
+    @Test
+     public void getAccounts_Authorized() throws Exception {
+        PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
+        LocalDate date = LocalDate.of(1982,5,10);
+        AccountHolder accountHolder = new AccountHolder("Raquel","123",date, address, null);
+        accountHolderRepository.save(accountHolder);
 
+        mockMvc.perform(get("/accounts").with(httpBasic(accountHolder.getUsername(),accountHolder.getPassword()))).andExpect(status().isOk());
+    }
+
+    //-------------------------------------GET ALL ACCOUNTS AUTHORIZED-------------------------------------------------//
+    @Test
+    public void getAccounts_unauthorized() throws Exception {
+        PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
+        LocalDate date = LocalDate.of(1982,5,10);
+        User user = new AccountHolder("Raquel","123",date, address, null);
+        userRepository.save(user);
+       // mockMvc.perform(get("/accounts")).andExpect(status().isUnauthorized());
+        mockMvc.perform(get("/accounts").with(httpBasic(user.getUsername(),"000"))).andExpect(status().isUnauthorized());
+    }
     //---------------------------------------------GET ACCOUNT--------------------------------------------------------//
     @Test
     void getAccountById_OK() throws Exception {

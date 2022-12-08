@@ -21,14 +21,14 @@ public class AccountHolderController {
 
     @GetMapping("/check-user-balance")
     @ResponseStatus(HttpStatus.OK)
-    public BigDecimal checkBalance(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam Long accountId, @RequestParam Long userId){
+    public BigDecimal checkBalance(@RequestParam Long accountId, @RequestParam Long userId){
             return accountHolderService.checkBalance(accountId, userId);
     }
 
 //--------------------------------------TRANSFER-----------------------------------------------------------//
     @PostMapping("/transfer")
     @ResponseStatus(HttpStatus.CREATED)
-    public Transaction transfer(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestBody  AccountHolderTransferDTO transferDTO) {
+    public Transaction transfer(@RequestBody  AccountHolderTransferDTO transferDTO) {
         return accountHolderService.transfer(transferDTO);
     }
 
