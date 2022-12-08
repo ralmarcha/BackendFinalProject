@@ -31,6 +31,7 @@ public class UserService implements UserServiceInt {
     @Autowired
     ThirdPartyRepository thirdPartyRepository;
     @Autowired
+    AccountHolderRepository accountHolderRepository;
 
 
     //------------------------------CREATE ACCOUNT HOLDER----------------------------------//
