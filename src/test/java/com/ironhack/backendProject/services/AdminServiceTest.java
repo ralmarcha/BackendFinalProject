@@ -1,15 +1,14 @@
 package com.ironhack.backendProject.services;
 
-import com.ironhack.backendProject.dto.CreateCheckingAccountDTO;
-import com.ironhack.backendProject.dto.CreateCreditCardDTO;
-import com.ironhack.backendProject.dto.CreateSavingsDTO;
+import com.ironhack.backendProject.dto.accounts.CreateCheckingAccountDTO;
+import com.ironhack.backendProject.dto.accounts.CreateCreditCardDTO;
+import com.ironhack.backendProject.dto.accounts.CreateSavingsDTO;
 import com.ironhack.backendProject.enums.Status;
 import com.ironhack.backendProject.models.account.*;
 import com.ironhack.backendProject.models.embeddeds.PrimaryAddress;
 import com.ironhack.backendProject.models.user.AccountHolder;
 import com.ironhack.backendProject.repositories.account.AccountRepository;
 import com.ironhack.backendProject.repositories.user.AccountHolderRepository;
-import com.ironhack.backendProject.services.account.AccountService;
 import com.ironhack.backendProject.services.user.AdminService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +27,10 @@ public class AdminServiceTest {
     @Autowired
     AccountHolderRepository accountHolderRepository;
     @Autowired
-    AccountService accountService;
-    @Autowired
     AccountRepository accountRepository;
 
 
-//-----------------------------CREATE CHECKING ACCOUNT WHEN AGE>24------------------------//
+//--------------------------------------CREATE CHECKING ACCOUNT WHEN AGE>24-------------------------------------------//
 @Test
 public void shouldCreateCheckingAccount_whenAgeUpper(){
     PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
@@ -45,7 +42,7 @@ public void shouldCreateCheckingAccount_whenAgeUpper(){
     assertTrue(result instanceof Checking);
 }
 
-    //---------------------------CREATE STUDENT ACCOUNT WHEN AGE <24------------------------//
+    //-----------------------------------CREATE STUDENT ACCOUNT WHEN AGE <24------------------------------------------//
     @Test
     public void shouldCreateStudentAccount_whenAgeLess(){
         PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
@@ -58,7 +55,7 @@ public void shouldCreateCheckingAccount_whenAgeUpper(){
         assertTrue(result instanceof StudentChecking);
     }
 
-    //-------------------------CREATE CHECKING ACCOUNT WITH DEFAULT VALUES--------------------//
+    //------------------------------CREATE CHECKING ACCOUNT WITH DEFAULT VALUES---------------------------------------//
     @Test
     public void createCheckingAccount_shouldShowDefaultValues(){
         PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
@@ -72,7 +69,7 @@ public void shouldCreateCheckingAccount_whenAgeUpper(){
         assertEquals(BigDecimal.valueOf(250),result.getMinimumBalance());
     }
 
-    //-------------------------CREATE CREDITCARD WITH DEFAULT VALUES----------------------------//
+    //---------------------------------CREATE CREDITCARD WITH DEFAULT VALUES------------------------------------------//
     @Test
     public void createCreditCard_shouldShowDefaultValues(){
         PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
@@ -87,7 +84,7 @@ public void shouldCreateCheckingAccount_whenAgeUpper(){
         assertEquals(BigDecimal.valueOf(100),result.getCreditLimit());
     }
 
-    //---------------------THROW ERROR CREDITCARD WHEN OUT OF ACCEPTED VALUES-----------------------//
+    //---------------------THROW ERROR CREDITCARD WHEN OUT OF ACCEPTED VALUES-----------------------------------------//
     @Test
     public void createCreditCard_shouldShowError(){
         PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
@@ -99,7 +96,7 @@ public void shouldCreateCheckingAccount_whenAgeUpper(){
         assertThrows(IllegalArgumentException.class, () -> {adminService.createCreditCard(createCreditCardDTO);});
     }
 
-    //------------------------------CREATE SAVINGS wWITH DEFAULT VALUES----------------------------//
+    //------------------------------CREATE SAVINGS WITH DEFAULT VALUES------------------------------------------------//
     @Test
     public void createSavings_shouldShowDefaultValues(){
         PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");

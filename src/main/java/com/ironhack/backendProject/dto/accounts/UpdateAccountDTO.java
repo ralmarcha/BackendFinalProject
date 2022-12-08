@@ -1,4 +1,4 @@
-package com.ironhack.backendProject.dto;
+package com.ironhack.backendProject.dto.accounts;
 
 import com.ironhack.backendProject.models.user.AccountHolder;
 

@@ -1,6 +1,9 @@
 package com.ironhack.backendProject.controllers;
 
-import com.ironhack.backendProject.dto.*;
+import com.ironhack.backendProject.dto.accounts.CreateCheckingAccountDTO;
+import com.ironhack.backendProject.dto.accounts.CreateCreditCardDTO;
+import com.ironhack.backendProject.dto.accounts.CreateSavingsDTO;
+import com.ironhack.backendProject.dto.accounts.UpdateAccountDTO;
 import com.ironhack.backendProject.models.account.Account;
 import com.ironhack.backendProject.services.user.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,6 @@
-package com.ironhack.backendProject.dto;
+package com.ironhack.backendProject.dto.accounts;
 
+import com.ironhack.backendProject.dto.accounts.CreateAccountDTO;
 import com.ironhack.backendProject.enums.Status;
 import com.ironhack.backendProject.models.user.AccountHolder;
 import jakarta.validation.constraints.Digits;
@@ -14,7 +15,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateSavingsDTO extends CreateAccountDTO{
+public class CreateSavingsDTO extends CreateAccountDTO {
     private Status status;
 
     @Digits(integer=1, fraction=4)

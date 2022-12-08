@@ -1,9 +1,9 @@
-package com.ironhack.backendProject.dto;
+package com.ironhack.backendProject.dto.accounts;
 
+import com.ironhack.backendProject.dto.accounts.CreateAccountDTO;
 import com.ironhack.backendProject.enums.Status;
 import com.ironhack.backendProject.models.user.AccountHolder;
 import jakarta.validation.constraints.Digits;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

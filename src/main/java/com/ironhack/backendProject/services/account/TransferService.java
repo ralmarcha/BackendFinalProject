@@ -1,19 +1,16 @@
 package com.ironhack.backendProject.services.account;
 
-import com.ironhack.backendProject.dto.ReceiveTransferDTO;
-import com.ironhack.backendProject.dto.SendTransferDTO;
+import com.ironhack.backendProject.dto.transfers.ReceiveTransferDTO;
+import com.ironhack.backendProject.dto.transfers.SendTransferDTO;
 import com.ironhack.backendProject.models.account.Transaction;
 import com.ironhack.backendProject.models.account.Account;
-import com.ironhack.backendProject.models.user.ThirdParty;
 import com.ironhack.backendProject.repositories.account.TransactionRepository;
 import com.ironhack.backendProject.repositories.user.ThirdPartyRepository;
 import com.ironhack.backendProject.repositories.user.UserRepository;
 import com.ironhack.backendProject.services.user.AdminService;
 import com.ironhack.backendProject.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 

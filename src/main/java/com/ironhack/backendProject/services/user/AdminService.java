@@ -1,6 +1,9 @@
 package com.ironhack.backendProject.services.user;
 
-import com.ironhack.backendProject.dto.*;
+import com.ironhack.backendProject.dto.accounts.CreateCheckingAccountDTO;
+import com.ironhack.backendProject.dto.accounts.CreateCreditCardDTO;
+import com.ironhack.backendProject.dto.accounts.CreateSavingsDTO;
+import com.ironhack.backendProject.dto.accounts.UpdateAccountDTO;
 import com.ironhack.backendProject.enums.Status;
 import com.ironhack.backendProject.models.account.*;
 import com.ironhack.backendProject.repositories.account.AccountRepository;

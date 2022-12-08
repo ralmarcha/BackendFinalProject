@@ -15,12 +15,12 @@ public class AccountService {
 @Autowired
     AccountRepository accountRepository;
 
-   //-------------------------------------- ADDING INTEREST RATE-------------------------------------------------//
+   //-------------------------------------- ADDING INTEREST RATE------------------------------------------------------//
         public void checkInterestByAccount(Account account) {
 
             if (account instanceof Savings) {
                 if(Period.between(account.getLastUpdateDate(), LocalDate.now()).getYears()>=1){
-                    account.setBalance((account.getBalance().multiply(((Savings) account).getInterestRate())).add(account.getBalance()));
+                    account.setBalance((account.getBalance().multiply(((Savings) account).getInterestRate())).add(account.getBalance()).setScale(2, RoundingMode.HALF_EVEN));
                     accountRepository.save(account);
                 }
                 }
@@ -28,20 +28,20 @@ public class AccountService {
                 Period period = Period.between(account.getLastUpdateDate(), LocalDate.now());
 
                 if(period.getMonths()>=1){
-                BigDecimal monthlyInterest = ((CreditCard) account).getInterestRate().divide(new BigDecimal("12"),2,RoundingMode.HALF_EVEN);
+                BigDecimal monthlyInterest = ((CreditCard) account).getInterestRate().divide(new BigDecimal("12"),2,RoundingMode.HALF_EVEN).setScale(2, RoundingMode.HALF_EVEN);
                 BigDecimal totalInterest = monthlyInterest.multiply(BigDecimal.valueOf(period.getMonths()));
-                account.setBalance(account.getBalance().multiply(totalInterest));
+                account.setBalance(account.getBalance().multiply(totalInterest).setScale(2, RoundingMode.HALF_EVEN).add(account.getBalance()));
                     accountRepository.save(account);
 
             }    }
 
         }
-//-------------------------------MAINTENANCE--------------------------//
+        //-----------------------------------------MAINTENANCE--------------------------------------------------------//
         public void checkMaintenance(Account account){
             if (account instanceof Checking){
                 Period period = Period.between(account.getLastUpdateDate(), LocalDate.now());
                 if(period.getMonths()>=1){
-                    account.setBalance(account.getBalance().add(((Checking) account).getMonthlyMaintenanceFee()).
+                    account.setBalance(account.getBalance().subtract(((Checking) account).getMonthlyMaintenanceFee()).
                             multiply(BigDecimal.valueOf(period.getMonths())).setScale(2, RoundingMode.HALF_EVEN));
                     accountRepository.save(account);
                 }

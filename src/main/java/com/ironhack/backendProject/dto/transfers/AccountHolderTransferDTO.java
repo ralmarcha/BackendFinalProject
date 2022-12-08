@@ -1,6 +1,5 @@
-package com.ironhack.backendProject.dto;
+package com.ironhack.backendProject.dto.transfers;
 
-import com.ironhack.backendProject.models.user.AccountHolder;
 import jakarta.validation.constraints.Digits;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,11 +12,14 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class CreateAccountDTO {
-    private String secretKey;
+public class AccountHolderTransferDTO {
+
+    private Long originAccountId;
+
+    private Long destinationAccountId;
 
     @Digits(integer=9, fraction= 2)
-    private BigDecimal balance;
+    private BigDecimal amount;
 
-    private AccountHolder primaryOwner;
+    private String senderName;
 }

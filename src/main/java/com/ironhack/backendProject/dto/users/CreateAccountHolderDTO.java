@@ -1,4 +1,4 @@
-package com.ironhack.backendProject.dto;
+package com.ironhack.backendProject.dto.users;
 
 import com.ironhack.backendProject.models.embeddeds.PrimaryAddress;
 import jakarta.persistence.Embedded;

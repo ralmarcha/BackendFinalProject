@@ -1,4 +1,4 @@
-package com.ironhack.backendProject.dto;
+package com.ironhack.backendProject.dto.users;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

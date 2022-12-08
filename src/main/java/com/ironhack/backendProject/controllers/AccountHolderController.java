@@ -1,6 +1,6 @@
 package com.ironhack.backendProject.controllers;
 
-import com.ironhack.backendProject.dto.AccountHolderTransferDTO;
+import com.ironhack.backendProject.dto.transfers.AccountHolderTransferDTO;
 import com.ironhack.backendProject.models.account.Transaction;
 import com.ironhack.backendProject.services.user.AccountHolderService;
 import org.springframework.beans.factory.annotation.Autowired;

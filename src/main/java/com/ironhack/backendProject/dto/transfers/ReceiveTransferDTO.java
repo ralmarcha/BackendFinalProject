@@ -1,4 +1,4 @@
-package com.ironhack.backendProject.dto;
+package com.ironhack.backendProject.dto.transfers;
 
 import jakarta.validation.constraints.Digits;
 import lombok.*;

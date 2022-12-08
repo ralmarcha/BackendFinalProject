@@ -1,8 +1,8 @@
 package com.ironhack.backendProject.controllers;
 
-import com.ironhack.backendProject.dto.CreateAccountHolderDTO;
-import com.ironhack.backendProject.dto.CreateAdminDTO;
-import com.ironhack.backendProject.dto.CreateThirdPartyDTO;
+import com.ironhack.backendProject.dto.users.CreateAccountHolderDTO;
+import com.ironhack.backendProject.dto.users.CreateAdminDTO;
+import com.ironhack.backendProject.dto.users.CreateThirdPartyDTO;
 import com.ironhack.backendProject.models.user.*;
 import com.ironhack.backendProject.services.user.UserService;
 import org.springframework.beans.factory.annotation.*;

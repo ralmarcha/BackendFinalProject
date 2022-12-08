@@ -1,7 +1,7 @@
 package com.ironhack.backendProject.controllers;
 
-import com.ironhack.backendProject.dto.ReceiveTransferDTO;
-import com.ironhack.backendProject.dto.SendTransferDTO;
+import com.ironhack.backendProject.dto.transfers.ReceiveTransferDTO;
+import com.ironhack.backendProject.dto.transfers.SendTransferDTO;
 import com.ironhack.backendProject.models.account.Transaction;
 import com.ironhack.backendProject.services.account.TransferService;
 import org.springframework.beans.factory.annotation.Autowired;

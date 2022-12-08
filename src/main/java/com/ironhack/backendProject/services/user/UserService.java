@@ -1,8 +1,8 @@
 package com.ironhack.backendProject.services.user;
 
-import com.ironhack.backendProject.dto.CreateAccountHolderDTO;
-import com.ironhack.backendProject.dto.CreateAdminDTO;
-import com.ironhack.backendProject.dto.CreateThirdPartyDTO;
+import com.ironhack.backendProject.dto.users.CreateAccountHolderDTO;
+import com.ironhack.backendProject.dto.users.CreateAdminDTO;
+import com.ironhack.backendProject.dto.users.CreateThirdPartyDTO;
 import com.ironhack.backendProject.models.user.AccountHolder;
 import com.ironhack.backendProject.models.user.Admin;
 import com.ironhack.backendProject.models.user.Role;
@@ -16,8 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.Optional;
 
 @Service
 public class UserService implements UserServiceInt {
