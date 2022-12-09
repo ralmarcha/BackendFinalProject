@@ -97,8 +97,7 @@ public class AdminControllerTest {
     }
     //---------------------------------------------GET ACCOUNT--------------------------------------------------------//
     @Test
-    @WithMockUser(username = "user1", password = "pwd")
-    void getAccountById_OK() throws Exception {
+       void getAccountById_OK() throws Exception {
         PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
         LocalDate date = LocalDate.of(1982,5,10);
         AccountHolder accountHolder = new AccountHolder("user1","pwd",date, address, null);
@@ -110,7 +109,6 @@ public class AdminControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-
     }
 
     //----------------------------------------GET ACCOUNT ID THROWS ERROR---------------------------------------------//

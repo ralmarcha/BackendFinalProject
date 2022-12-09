@@ -69,20 +69,9 @@ public class AdminController {
     //----------------------------------------GET ACCOUNT BY ID-------------------------------------------------------------//
     @GetMapping("/account/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Account findAccountById(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
-        Account account = accountRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Account not found"));
-        User user = userRepository.findByUsername(userDetails.getUsername()).get();
-
-        if(user.getRoles().toString().equals("ROLE_ADMIN")){
+    public Account findAccountById(@PathVariable Long id) {
             return adminService.findAccountById(id);
-        }
-        if(!account.getPrimaryOwner().getId().equals(user.getId())){
-                throw new ResponseStatusException(HttpStatus.FORBIDDEN,"You don't have access for this account");
-            }else{
-                return adminService.findAccountById(id);
-            }
-        }
-
+     }
 
     //--------------------------------------GET BALANCE---------------------------------------------------------------//
     @GetMapping("/check-balance/{id}")

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironhack.backendProject.dto.accounts.CreateCheckingAccountDTO;
 import com.ironhack.backendProject.dto.transfers.AccountHolderTransferDTO;
 import com.ironhack.backendProject.dto.users.CreateAccountHolderDTO;
+import com.ironhack.backendProject.models.account.Account;
 import com.ironhack.backendProject.models.account.Checking;
 import com.ironhack.backendProject.models.embeddeds.PrimaryAddress;
 import com.ironhack.backendProject.models.user.AccountHolder;
@@ -18,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -72,9 +74,23 @@ public class AccountHolderControllerTest {
                MvcResult result = mockMvc.perform(get("/user/check-balance")
                         .params(params))
                 .andExpect(status().isOk()).andReturn();
-
     }
+    //-------------------------------------------CHECK OWN ACCOUNT BY ID----------------------------------------------//
+    @Test
+    @WithMockUser(username = "user1", password = "pwd")
+    void getOwnAccount_OK() throws Exception {
+        PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
+        LocalDate date = LocalDate.of(1982,5,10);
+        AccountHolder accountHolder = new AccountHolder("user1","pwd",date, address, null);
+        accountHolderRepository.save(accountHolder);
+        CreateCheckingAccountDTO account1 = new CreateCheckingAccountDTO("test", new BigDecimal(500),accountHolder);
+        Account result1 = adminService.createCheckingAccount(account1);
 
+        MvcResult result = mockMvc.perform(get("/user/account/1"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+    }
     //--------------------------------------TRANSFER BETWEEN ACCOUNTS---------------------------------------------//
     @Test
     void transfer_Test() throws Exception {
