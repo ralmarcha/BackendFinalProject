@@ -6,16 +6,16 @@ import com.ironhack.backendProject.dto.accounts.CreateSavingsDTO;
 import com.ironhack.backendProject.dto.accounts.UpdateAccountDTO;
 import com.ironhack.backendProject.models.account.Account;
 import com.ironhack.backendProject.models.user.User;
+import com.ironhack.backendProject.repositories.account.AccountRepository;
 import com.ironhack.backendProject.repositories.user.UserRepository;
 import com.ironhack.backendProject.services.account.AccountService;
 import com.ironhack.backendProject.services.user.AdminService;
-import com.ironhack.backendProject.security.CustomUserDetailsService;
-import com.ironhack.backendProject.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -25,16 +25,9 @@ public class AdminController {
     @Autowired
     AdminService adminService;
     @Autowired
-    AccountService accountService;
-    @Autowired
     UserRepository userRepository;
-
     @Autowired
-    UserService userService;
-
-    @Autowired
-    CustomUserDetailsService customUserDetailsService;
-
+    AccountRepository accountRepository;
 
 
     //-------------------------------------GET ALL ACCOUNTS-----------------------------------------------------------//
@@ -77,8 +70,19 @@ public class AdminController {
     @GetMapping("/account/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Account findAccountById(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
-        return adminService.findAccountById(id);
-    }
+        Account account = accountRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Account not found"));
+        User user = userRepository.findByUsername(userDetails.getUsername()).get();
+
+        if(user.getRoles().toString().equals("ROLE_ADMIN")){
+            return adminService.findAccountById(id);
+        }
+        if(!account.getPrimaryOwner().getId().equals(user.getId())){
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN,"You don't have access for this account");
+            }else{
+                return adminService.findAccountById(id);
+            }
+        }
+
 
     //--------------------------------------GET BALANCE---------------------------------------------------------------//
     @GetMapping("/check-balance/{id}")
