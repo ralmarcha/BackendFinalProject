@@ -12,6 +12,7 @@ import com.ironhack.backendProject.services.user.AdminService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -47,7 +48,6 @@ public class AccountHolderServiceTest {
     account2 = (Checking) adminService.findAccountById(account2.getId());
     assertEquals(new BigDecimal(950).setScale(2), account.getBalance());
     assertEquals(new BigDecimal(550).setScale(2), account2.getBalance());
-
     }
 
     //------------------------------TRANSFER THROW ERROR WHEN SENDER NAME NOT EQUAL-----------------------------------//
@@ -64,7 +64,7 @@ public class AccountHolderServiceTest {
 
         AccountHolderTransferDTO transferDTO = new AccountHolderTransferDTO(account.getId(), account2.getId(), new BigDecimal(50).setScale(2), "Pau");
 
-        assertThrows(IllegalArgumentException.class, () -> {accountHolderService.transfer(transferDTO);});
+        assertThrows(ResponseStatusException.class, () -> {accountHolderService.transfer(transferDTO);});
     }
     //----------------------------TRANSFER THROW ERROR WHEN SENDER INSUFFICIENT FUNDS---------------------------------//
     @Test
@@ -80,7 +80,7 @@ public class AccountHolderServiceTest {
 
         AccountHolderTransferDTO transferDTO = new AccountHolderTransferDTO(account.getId(), account2.getId(), new BigDecimal(1500).setScale(2), "Pau");
 
-        assertThrows(IllegalArgumentException.class, () -> {accountHolderService.transfer(transferDTO);});
+        assertThrows(ResponseStatusException.class, () -> {accountHolderService.transfer(transferDTO);});
     }
     //----------------------------CHECKBALANCE THROW ERROR WHEN NOT OWN ACCOUNT---------------------------------------//
     @Test
@@ -94,6 +94,6 @@ public class AccountHolderServiceTest {
         CreateCheckingAccountDTO createAccountDTO = new CreateCheckingAccountDTO("aaa", new BigDecimal(1000).setScale(2), accountHolder1);
         Checking account = (Checking) adminService.createCheckingAccount(createAccountDTO);
 
-        assertThrows(IllegalArgumentException.class, () -> {accountHolderService.checkBalance(1L, 2L);});
+        assertThrows(ResponseStatusException.class, () -> {accountHolderService.checkBalance(1L, 3L);});
     }
 }

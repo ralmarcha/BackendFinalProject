@@ -1,4 +1,4 @@
-package com.ironhack.backendProject.services.user;
+package com.ironhack.backendProject.security;
 
 import com.ironhack.backendProject.models.user.User;
 

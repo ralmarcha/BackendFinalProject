@@ -1,6 +1,5 @@
 package com.ironhack.backendProject.dto.accounts;
 
-import com.ironhack.backendProject.dto.accounts.CreateAccountDTO;
 import com.ironhack.backendProject.enums.Status;
 import com.ironhack.backendProject.models.user.AccountHolder;
 import jakarta.validation.constraints.Digits;
@@ -24,14 +23,16 @@ public class CreateSavingsDTO extends CreateAccountDTO {
     @Digits(integer=9, fraction=2)
     private BigDecimal minimumBalance;
 
-    public CreateSavingsDTO(String secretKey, @Digits(integer = 9, fraction = 2) BigDecimal balance, AccountHolder primaryOwner) {
-        super(secretKey, balance, primaryOwner);
-    }
-
     public CreateSavingsDTO(String secretKey, @Digits(integer = 9, fraction = 2) BigDecimal balance, AccountHolder primaryOwner, Status status, BigDecimal interestRate, BigDecimal minimumBalance) {
         super(secretKey, balance, primaryOwner);
         this.status = status;
         this.interestRate = interestRate;
         this.minimumBalance = minimumBalance;
+    }
+
+    public CreateSavingsDTO(String secretKey, @Digits(integer = 9, fraction = 2) BigDecimal balance, AccountHolder primaryOwner) {
+        super(secretKey, balance, primaryOwner);
+
+
     }
 }

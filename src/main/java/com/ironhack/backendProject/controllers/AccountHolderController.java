@@ -3,6 +3,7 @@ package com.ironhack.backendProject.controllers;
 import com.ironhack.backendProject.dto.transfers.AccountHolderTransferDTO;
 import com.ironhack.backendProject.models.account.Account;
 import com.ironhack.backendProject.models.account.Transaction;
+import com.ironhack.backendProject.models.user.User;
 import com.ironhack.backendProject.repositories.user.UserRepository;
 import com.ironhack.backendProject.services.account.AccountService;
 import com.ironhack.backendProject.services.user.AccountHolderService;
@@ -28,14 +29,15 @@ public class AccountHolderController {
 
 
 //--------------------------------------GET OWN ACCOUNT BALANCE-------------------------------------------------------//
-    @GetMapping("user/check-balance")
+    @GetMapping("/user/check-balance")
     @ResponseStatus(HttpStatus.OK)
     public BigDecimal checkBalance(@RequestParam Long accountId, @RequestParam Long userId, @AuthenticationPrincipal UserDetails userDetails){
-            return accountHolderService.checkBalance(accountId, userId);
+            User user= userRepository.findByUsername(userDetails.getUsername()).get();
+            return accountHolderService.checkBalance(accountId, user.getId());
     }
 
  //--------------------------------------GET OWN ACCOUNTS ------------------------------------------------------------//
-    @GetMapping("user/accounts")
+    @GetMapping("/user/accounts")
     public List<Account> getAccounts(@AuthenticationPrincipal UserDetails userDetails){
         return accountService.getAccountsByUsername(userDetails.getUsername());
     }
@@ -46,5 +48,4 @@ public class AccountHolderController {
     public Transaction transfer(@RequestBody  AccountHolderTransferDTO transferDTO) {
          return accountHolderService.transfer(transferDTO);
     }
-
 }

@@ -1,24 +1,21 @@
 package com.ironhack.backendProject.security;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.HashSet;
 import com.ironhack.backendProject.models.user.User;
 import com.ironhack.backendProject.models.user.Role;
-import org.springframework.security.core.*;
-import org.springframework.security.core.authority.*;
-import org.springframework.security.core.userdetails.*;
 
-import java.util.*;
+
 
 public class CustomUserDetails implements UserDetails {
 
     private User user;
 
-    public User getUser() {
-        return user;
-    }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public CustomUserDetails(User user) {
         this.user = user;
@@ -28,7 +25,7 @@ public class CustomUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
       Collection<GrantedAuthority> authorities = new HashSet<>();
 
-        for (Role role : user.getRole()) {
+        for (Role role : user.getRoles()) {
             authorities.add(new SimpleGrantedAuthority("ROLE_"  + role.getRole()));
         }
 
@@ -36,7 +33,13 @@ public class CustomUserDetails implements UserDetails {
 
     }
 
+    public User getUser() {
+        return user;
+    }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
     @Override
     public String getPassword() {
         return user.getPassword();

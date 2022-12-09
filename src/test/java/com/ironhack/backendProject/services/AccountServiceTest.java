@@ -10,7 +10,6 @@ import com.ironhack.backendProject.models.embeddeds.PrimaryAddress;
 import com.ironhack.backendProject.models.user.AccountHolder;
 import com.ironhack.backendProject.repositories.account.AccountRepository;
 import com.ironhack.backendProject.repositories.user.AccountHolderRepository;
-import com.ironhack.backendProject.services.account.AccountService;
 import com.ironhack.backendProject.services.user.AccountHolderService;
 import com.ironhack.backendProject.services.user.AdminService;
 import org.junit.jupiter.api.Test;
@@ -36,6 +35,7 @@ public class AccountServiceTest {
     @Autowired
     AccountRepository accountRepository;
 
+
 //--------------------------------------------PENALTY FEE IS APPLIED-------------------------------------------------//
     @Test
     public void penaltyFeeIsApplied_WhenMinimumBalance(){
@@ -57,7 +57,7 @@ public void maintenanceFeeIsApplied_WhenPeriod(){
     AccountHolder accountHolder = new AccountHolder("Raquel","123",date, address, null);
     accountHolderRepository.save(accountHolder);
 
-    CreateCheckingAccountDTO createAccountDTO = new CreateCheckingAccountDTO("aaa", new BigDecimal(500), accountHolder);
+    CreateCheckingAccountDTO createAccountDTO = new CreateCheckingAccountDTO("aaa", new BigDecimal(500),accountHolder);
     Account result = adminService.createCheckingAccount(createAccountDTO);
     result.setLastUpdateDate(LocalDate.of(2022,11,6));
     accountRepository.save(result);

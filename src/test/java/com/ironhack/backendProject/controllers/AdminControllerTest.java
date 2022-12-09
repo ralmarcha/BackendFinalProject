@@ -7,7 +7,6 @@ import com.ironhack.backendProject.dto.accounts.CreateSavingsDTO;
 import com.ironhack.backendProject.models.account.Account;
 import com.ironhack.backendProject.models.embeddeds.PrimaryAddress;
 import com.ironhack.backendProject.models.user.AccountHolder;
-import com.ironhack.backendProject.models.user.User;
 import com.ironhack.backendProject.repositories.account.AccountRepository;
 import com.ironhack.backendProject.repositories.user.AccountHolderRepository;
 import com.ironhack.backendProject.repositories.user.UserRepository;
@@ -18,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -25,13 +25,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -66,6 +64,7 @@ public class AdminControllerTest {
     }
     //-------------------------------------GET ALL ACCOUNTS-----------------------------------------------------------//
     @Test
+    @WithMockUser(username = "Raquel", password = "123")
     void getAllAccounts_OK() throws Exception {
         PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
         LocalDate date = LocalDate.of(1982,5,10);
@@ -76,12 +75,26 @@ public class AdminControllerTest {
         Account result1 = adminService.createCheckingAccount(account1);
         Account result2 = adminService.createCheckingAccount(account2);
 
-        MvcResult result = mockMvc.perform(get("/admin/accounts"))
+        MvcResult result = mockMvc.perform(get("/accounts"))
                 .andExpect(status().isOk())
                 .andReturn();
         assertEquals(2, accountRepository.findAll().size());
     }
+    //-------------------------------------GET ALL USERS--------------------------------------------------------------//
+    @Test
+    void getAllUsers_OK() throws Exception {
+        PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
+        LocalDate date = LocalDate.of(1982,5,10);
+        AccountHolder accountHolder = new AccountHolder("Raquel","123",date, address, null);
+        accountHolderRepository.save(accountHolder);
+        AccountHolder accountHolder2 = new AccountHolder("xxx","123",date, address, null);
+        accountHolderRepository.save(accountHolder2);
 
+        MvcResult result = mockMvc.perform(get("/users"))
+                .andExpect(status().isOk())
+                .andReturn();
+        assertEquals(3, userRepository.findAll().size());
+    }
     //---------------------------------------------GET ACCOUNT--------------------------------------------------------//
     @Test
     void getAccountById_OK() throws Exception {
@@ -89,7 +102,7 @@ public class AdminControllerTest {
         LocalDate date = LocalDate.of(1982,5,10);
         AccountHolder accountHolder = new AccountHolder("Raquel","123",date, address, null);
         accountHolderRepository.save(accountHolder);
-        CreateCheckingAccountDTO account1 = new CreateCheckingAccountDTO("test", new BigDecimal(500), accountHolder);
+        CreateCheckingAccountDTO account1 = new CreateCheckingAccountDTO("test", new BigDecimal(500),accountHolder);
         Account result1 = adminService.createCheckingAccount(account1);
 
         MvcResult result = mockMvc.perform(get("/account/1"))
@@ -117,7 +130,7 @@ public class AdminControllerTest {
 
         String body = objectMapper.writeValueAsString(createAccount);
 
-        MvcResult result = mockMvc.perform(post("/create-checking-account").content(body)
+        MvcResult result = mockMvc.perform(post("/create-account/checking").content(body)
                 .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated()).andReturn();
         assertTrue(result.getResponse().getContentAsString().contains("test"));
     }
@@ -131,7 +144,7 @@ public class AdminControllerTest {
         CreateSavingsDTO createSavings = new CreateSavingsDTO("test", new BigDecimal(500), accountHolder);
         String body = objectMapper.writeValueAsString(createSavings);
 
-        MvcResult result = mockMvc.perform(post("/create-savings-account").content(body)
+        MvcResult result = mockMvc.perform(post("/create-account/savings").content(body)
                 .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated()).andReturn();
         assertTrue(result.getResponse().getContentAsString().contains("test"));
     }
@@ -145,7 +158,7 @@ public class AdminControllerTest {
         CreateCreditCardDTO createCreditCard = new CreateCreditCardDTO("test", new BigDecimal(500), accountHolder);
         String body = objectMapper.writeValueAsString(createCreditCard);
 
-        MvcResult result = mockMvc.perform(post("/create-credit-card").content(body)
+        MvcResult result = mockMvc.perform(post("/create-account/credit").content(body)
                 .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated()).andReturn();
         assertTrue(result.getResponse().getContentAsString().contains("test"));
     }

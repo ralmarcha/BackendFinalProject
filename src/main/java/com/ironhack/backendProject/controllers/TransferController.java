@@ -15,12 +15,12 @@ public class TransferController {
     @Autowired
     TransferService transferService;
 
-    //----------------------THIRD PARTY SEND TRANSFER--------------------------------//
+    //--------------------------------THIRD PARTY SEND TRANSFER-------------------------------------------------------//
     @PostMapping("/transfer/send")
     public Transaction sendTransfer(@RequestHeader("hash-key") String hashKey, @RequestBody SendTransferDTO sendTransferDTO) {
         return transferService.sendTransfer(hashKey,sendTransferDTO);
     }
-    //----------------------THIRD PARTY RECEIVE TRANSFER--------------------------------//
+    //---------------------------------THIRD PARTY RECEIVE TRANSFER---------------------------------------------------//
     @PostMapping("/transfer/receive")
     public Transaction receiveTransfer(@RequestHeader("hash-key") String hashKey, @RequestBody ReceiveTransferDTO receiveTransferDTO) {
         return transferService.receiveTransfer(hashKey, receiveTransferDTO);

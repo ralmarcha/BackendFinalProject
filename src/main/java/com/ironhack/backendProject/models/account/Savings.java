@@ -13,7 +13,6 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
-
 @Entity
 @Getter
 @Setter

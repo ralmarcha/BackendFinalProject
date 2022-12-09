@@ -6,6 +6,7 @@ import com.ironhack.backendProject.LocalDateDeserializer;
 import com.ironhack.backendProject.LocalDateSerializer;
 import com.ironhack.backendProject.models.embeddeds.PrimaryAddress;
 import jakarta.persistence.Embedded;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateAccountHolderDTO {
+    @NotEmpty
     private String username;
+    @NotEmpty
     private String password;
     @Embedded
     private PrimaryAddress address;

@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -19,9 +20,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,7 +43,7 @@ public class UserControllerTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
 
-    //------------------------------END POINT CREATE ACCOUNT HOLDER--------------------------------//
+    //------------------------------CREATE ACCOUNT HOLDER-------------------------------------------------------------//
     @Test
     void createAccountHolder_OK() throws Exception {
         PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
@@ -55,7 +54,7 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated()).andReturn();
         assertTrue(result.getResponse().getContentAsString().contains("Negu"));
     }
-    //------------------------------END POINT CREATE ADMIN-----------------------------------------//
+    //------------------------------CREATE ADMIN----------------------------------------------------------------------//
     @Test
     void createAdmin_OK() throws Exception {
         CreateAdminDTO admin = new CreateAdminDTO("Negu", "123");
@@ -64,7 +63,8 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated()).andReturn();
         assertTrue(result.getResponse().getContentAsString().contains("Negu"));
     }
-    //------------------------------END POINT CREATE THIRD PARTY------------------------------------------------------//
+
+    //------------------------------CREATE THIRD PARTY---------------------------------------------------------------//
     @Test
     void createThirdParty_OK() throws Exception {
     CreateThirdPartyDTO thirdParty = new CreateThirdPartyDTO("abc", "becu");
@@ -73,19 +73,18 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated()).andReturn();
         assertTrue(result.getResponse().getContentAsString().contains("becu"));
     }
+
     //------------------------------MODIFY PASSWORD-------------------------------------------------------------------//
     @Test
-    public void modifyPassword_Unauthorized() throws Exception {
+    @WithMockUser(username = "user1", password = "pwd")
+    public void modifyPassword_authorized() throws Exception {
         PrimaryAddress address = new PrimaryAddress("c/Lesmes", 8330, "Barcelona", "Spain");
         LocalDate date = LocalDate.of(1982,5,10);
-        AccountHolder accountHolder = new AccountHolder("Raquel", "123", date, address, null);
+        AccountHolder accountHolder = new AccountHolder("user1", "pwd", date, address, null);
         accountHolderRepository.save(accountHolder);
 
-        /*MvcResult result = mockMvc.perform(patch("/modify-password")
+        MvcResult result = mockMvc.perform(patch("/modify-password")
                         .param("password", "000"))
-                .andExpect(status().isUnauthorized()).andReturn();*/
-        mockMvc.perform(patch("/modify-password")).andExpect(status().isUnauthorized());
-     /*    mockMvc.perform(patch("/modify-password").with(httpBasic(accountHolder.getUsername(),accountHolder
-                 .getPassword()))).andExpect(status().isOk());*/
+                .andExpect(status().isOk()).andReturn();
     }}
 

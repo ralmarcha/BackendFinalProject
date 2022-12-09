@@ -31,14 +31,11 @@ public abstract class Account {
 private Long Id;
 @NotEmpty
 private String secretKey;
-
 @Digits(integer=9, fraction= 2)
 private BigDecimal balance;
-
 @ManyToOne
 @JoinColumn
 private AccountHolder primaryOwner;
-
 @ManyToOne
 @JoinColumn(name = "secondary_owner_id")
 private AccountHolder secondaryOwner;

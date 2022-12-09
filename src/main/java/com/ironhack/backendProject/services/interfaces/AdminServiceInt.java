@@ -5,6 +5,7 @@ import com.ironhack.backendProject.dto.accounts.CreateCreditCardDTO;
 import com.ironhack.backendProject.dto.accounts.CreateSavingsDTO;
 import com.ironhack.backendProject.dto.accounts.UpdateAccountDTO;
 import com.ironhack.backendProject.models.account.Account;
+import com.ironhack.backendProject.models.user.User;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 public interface AdminServiceInt {
 
     List<Account> getAllAccounts();
+    List<User> getAllUsers();
     Account createCheckingAccount(CreateCheckingAccountDTO checkingAccount);
     Account createSavingsAccount(CreateSavingsDTO savingsAccount);
     Account createCreditCard(CreateCreditCardDTO creditCardAccount);
@@ -20,6 +22,5 @@ public interface AdminServiceInt {
     Account setBalance(Long id,BigDecimal balance);
     Account findAccountById(Long id);
     Account updateAccount(Long id, UpdateAccountDTO accountDTO);
-
 
 }

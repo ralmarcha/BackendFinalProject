@@ -39,7 +39,6 @@ public class Transaction {
     @JoinColumn
     private Account destinationAccount;
 
-
     public Transaction(Account originAccount, Account destinationAccount, BigDecimal amount) {
         this.originAccount = originAccount;
         this.destinationAccount = destinationAccount;

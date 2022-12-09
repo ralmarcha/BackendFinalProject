@@ -1,6 +1,5 @@
 package com.ironhack.backendProject.dto.accounts;
 
-import com.ironhack.backendProject.dto.accounts.CreateAccountDTO;
 import com.ironhack.backendProject.models.user.AccountHolder;
 import jakarta.validation.constraints.Digits;
 import lombok.AllArgsConstructor;

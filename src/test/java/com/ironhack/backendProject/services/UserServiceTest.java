@@ -22,7 +22,7 @@ public class UserServiceTest {
     UserService userService;
 
 
-    //------------------------------CREATE ACCOUNT HOLDER---------------------------------//
+    //------------------------------CREATE ACCOUNT HOLDER------------------------------------------------------------//
     @Test
     public void shouldCreateAccountHolder_Test(){
        PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
@@ -31,9 +31,8 @@ public class UserServiceTest {
        AccountHolder result = userService.createAccountHolder(accountHolder);
 
        assertEquals("Negu", result.getUsername());
-
     }
-    //------------------------------CREATE THIRD PARTY------------------------------------//
+    //------------------------------CREATE THIRD PARTY----------------------------------------------------------------//
     @Test
     public void shouldCreateThirdParty_Test(){
         CreateThirdPartyDTO thirdParty = new CreateThirdPartyDTO("abc", "becu");
@@ -42,7 +41,7 @@ public class UserServiceTest {
         assertEquals("becu", result.getName());
     }
 
-    //------------------------------CREATE ADMIN------------------------------------------//
+    //------------------------------CREATE ADMIN----------------------------------------------------------------------//
     @Test
     public void shouldCreateAdmin_Test(){
         CreateAdminDTO admin = new CreateAdminDTO("Negu", "123");

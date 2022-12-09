@@ -26,13 +26,14 @@ public class SecurityConfiguration {
         httpSecurity.httpBasic();
 
         httpSecurity.authorizeHttpRequests()
-               .requestMatchers(HttpMethod.GET, "/check-user-balance").hasRole("ACCOUNT_HOLDER" )
+               .requestMatchers(HttpMethod.GET, "/user/check-balance").hasRole("ACCOUNT_HOLDER" )
+                .requestMatchers(HttpMethod.GET, "/user/accounts").hasRole("ACCOUNT_HOLDER" )
                .requestMatchers(HttpMethod.POST, "/transfer").hasAnyRole( "ACCOUNT_HOLDER", "ADMIN")
-               .requestMatchers(HttpMethod.GET, "/accounts").hasAnyRole("ADMIN", "ACCOUNT_HOLDER")
+               .requestMatchers(HttpMethod.GET, "/accounts").hasAnyRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
-               .requestMatchers(HttpMethod.POST, "/create-checking-account").hasRole("ADMIN")
-               .requestMatchers(HttpMethod.POST, "/create-savings-account").hasRole("ADMIN")
-               .requestMatchers(HttpMethod.POST, "/create-credit-card").hasRole("ADMIN")
+               .requestMatchers(HttpMethod.POST, "/create-account/checking").hasRole("ADMIN")
+               .requestMatchers(HttpMethod.POST, "/create-account/savings").hasRole("ADMIN")
+               .requestMatchers(HttpMethod.POST, "/create-account/credit").hasRole("ADMIN")
                .requestMatchers(HttpMethod.DELETE, "/delete-account/{id}").hasRole("ADMIN")
                .requestMatchers(HttpMethod.GET, "/account/{id}").hasAnyRole("ADMIN", "ACCOUNT_HOLDER")
                .requestMatchers(HttpMethod.GET, "/check-balance/{id}").hasRole("ADMIN")
@@ -43,7 +44,7 @@ public class SecurityConfiguration {
                .requestMatchers(HttpMethod.POST, "/create-account-holder").hasRole("ADMIN")
                .requestMatchers(HttpMethod.POST, "/create-third-party").hasRole("ADMIN")
                .requestMatchers(HttpMethod.POST, "/create-admin").hasRole("ADMIN")
-               .requestMatchers(HttpMethod.GET, "/modify-password").hasRole("ACCOUNT_HOLDER" )
+               .requestMatchers(HttpMethod.GET, "/modify-password").hasRole("ACCOUNT_HOLDER")
                .anyRequest().permitAll();
 
         httpSecurity.csrf().disable();

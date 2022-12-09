@@ -4,7 +4,8 @@ import com.ironhack.backendProject.models.account.*;
 import com.ironhack.backendProject.models.user.User;
 import com.ironhack.backendProject.repositories.account.AccountRepository;
 import com.ironhack.backendProject.repositories.user.UserRepository;
-import com.ironhack.backendProject.services.user.UserService;
+import com.ironhack.backendProject.services.interfaces.AccountServiceInt;
+import com.ironhack.backendProject.services.user.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,12 +17,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AccountService {
+public class AccountService implements AccountServiceInt {
 @Autowired
 AccountRepository accountRepository;
-
 @Autowired
 UserRepository userRepository;
+
 
    //-------------------------------------- ADDING INTEREST RATE------------------------------------------------------//
         public void checkInterestByAccount(Account account) {
@@ -40,9 +41,8 @@ UserRepository userRepository;
                 BigDecimal totalInterest = monthlyInterest.multiply(BigDecimal.valueOf(period.getMonths()));
                 account.setBalance(account.getBalance().multiply(totalInterest).setScale(2, RoundingMode.HALF_EVEN).add(account.getBalance()));
                     accountRepository.save(account);
-
-            }    }
-
+            }
+            }
         }
         //-----------------------------------------MAINTENANCE--------------------------------------------------------//
         public void checkMaintenance(Account account){
@@ -84,16 +84,12 @@ UserRepository userRepository;
                     return accountRepository.save(account);
        }
 
-        //----------------------------------GET ACCOUNT BY USER ID----------------------------------------------------//
-     public List<Account> getAccountsByUsername(String username) {
+        //----------------------------------GET ACCOUNT BY USER ----------------------------------------------------//
+        public List<Account> getAccountsByUsername(String username) {
             Optional<User> user = userRepository.findByUsername(username);
             return accountRepository.findByPrimaryOwner(user.get());
         }
-       public List<Account> getAccountsByUserId(Long id) {
-              Optional<User> user = userRepository.findById(id);
-               return accountRepository.findByPrimaryOwner(user.get());
-    }
-    }
+   }
 
 
 

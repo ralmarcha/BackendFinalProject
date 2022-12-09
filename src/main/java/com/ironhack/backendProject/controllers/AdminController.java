@@ -5,26 +5,20 @@ import com.ironhack.backendProject.dto.accounts.CreateCreditCardDTO;
 import com.ironhack.backendProject.dto.accounts.CreateSavingsDTO;
 import com.ironhack.backendProject.dto.accounts.UpdateAccountDTO;
 import com.ironhack.backendProject.models.account.Account;
-import com.ironhack.backendProject.models.user.Role;
 import com.ironhack.backendProject.models.user.User;
 import com.ironhack.backendProject.repositories.user.UserRepository;
-import com.ironhack.backendProject.security.CustomUserDetails;
 import com.ironhack.backendProject.services.account.AccountService;
 import com.ironhack.backendProject.services.user.AdminService;
-import com.ironhack.backendProject.services.user.CustomUserDetailsService;
+import com.ironhack.backendProject.security.CustomUserDetailsService;
 import com.ironhack.backendProject.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class AdminController {
@@ -44,7 +38,7 @@ public class AdminController {
 
 
     //-------------------------------------GET ALL ACCOUNTS-----------------------------------------------------------//
-    @GetMapping("admin/accounts")
+    @GetMapping("/accounts")
     public List<Account> getAccounts(@AuthenticationPrincipal UserDetails userDetails){
             return adminService.getAllAccounts();
      }
@@ -54,19 +48,19 @@ public class AdminController {
         return adminService.getAllUsers();  }
 
     //--------------------------------------CREATE ACCOUNTS-----------------------------------------------------------//
-    @PostMapping("/create-checking-account")
+    @PostMapping("/create-account/checking")
     @ResponseStatus(value = HttpStatus.CREATED)
     public Account createCheckingAccount(@RequestBody CreateCheckingAccountDTO checkingAccount){
         return adminService.createCheckingAccount(checkingAccount);
     }
 
-    @PostMapping("/create-savings-account")
+    @PostMapping("/create-account/savings")
     @ResponseStatus(value = HttpStatus.CREATED)
     public Account createSavingsAccount(@RequestBody CreateSavingsDTO savingsAccount){
         return adminService.createSavingsAccount(savingsAccount);
     }
 
-    @PostMapping("/create-credit-card")
+    @PostMapping("/create-account/credit")
     @ResponseStatus(value = HttpStatus.CREATED)
     public Account createCreditCard(@RequestBody CreateCreditCardDTO creditCardAccount){
         return adminService.createCreditCard(creditCardAccount);
@@ -79,10 +73,10 @@ public class AdminController {
         adminService.deleteAccountById(id);
     }
 
-    //----------------------------------------GET ACCOUNT-------------------------------------------------------------//
+    //----------------------------------------GET ACCOUNT BY ID-------------------------------------------------------------//
     @GetMapping("/account/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Account findAccountById(@PathVariable Long id) {
+    public Account findAccountById(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
         return adminService.findAccountById(id);
     }
 

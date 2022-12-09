@@ -23,7 +23,6 @@ public class Checking extends Account {
 
 private BigDecimal minimumBalance = new BigDecimal("250").setScale(2, RoundingMode.HALF_EVEN);
 private BigDecimal monthlyMaintenanceFee = new BigDecimal("12").setScale(2, RoundingMode.HALF_EVEN);
-
 @Enumerated(EnumType.STRING)
 private Status status;
 
