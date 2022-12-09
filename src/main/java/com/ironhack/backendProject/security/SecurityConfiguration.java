@@ -26,9 +26,10 @@ public class SecurityConfiguration {
         httpSecurity.httpBasic();
 
         httpSecurity.authorizeHttpRequests()
-               .requestMatchers(HttpMethod.GET, "/check-user-balance").hasAnyRole("ACCOUNT_HOLDER" )
-               .requestMatchers(HttpMethod.POST, "/transfer").hasAnyRole( "ACCOUNT_HOLDER")
+               .requestMatchers(HttpMethod.GET, "/check-user-balance").hasRole("ACCOUNT_HOLDER" )
+               .requestMatchers(HttpMethod.POST, "/transfer").hasAnyRole( "ACCOUNT_HOLDER", "ADMIN")
                .requestMatchers(HttpMethod.GET, "/accounts").hasAnyRole("ADMIN", "ACCOUNT_HOLDER")
+                .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
                .requestMatchers(HttpMethod.POST, "/create-checking-account").hasRole("ADMIN")
                .requestMatchers(HttpMethod.POST, "/create-savings-account").hasRole("ADMIN")
                .requestMatchers(HttpMethod.POST, "/create-credit-card").hasRole("ADMIN")
@@ -42,6 +43,7 @@ public class SecurityConfiguration {
                .requestMatchers(HttpMethod.POST, "/create-account-holder").hasRole("ADMIN")
                .requestMatchers(HttpMethod.POST, "/create-third-party").hasRole("ADMIN")
                .requestMatchers(HttpMethod.POST, "/create-admin").hasRole("ADMIN")
+               .requestMatchers(HttpMethod.GET, "/modify-password").hasRole("ACCOUNT_HOLDER" )
                .anyRequest().permitAll();
 
         httpSecurity.csrf().disable();

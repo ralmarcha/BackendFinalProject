@@ -32,7 +32,7 @@ public class AccountHolderService implements AccountHolderInt {
     @Autowired
     AccountService accountService;
 
-    //--------------------CHECK OWN ACCOUNT BALANCE------------------------//
+    //--------------------CHECK OWN ACCOUNT BALANCE-------------------------------------------------------------------//
 
     public BigDecimal checkBalance(Long accountId, Long userId) {
         Account account = accountRepository.findById(accountId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Account not found"));
@@ -45,7 +45,7 @@ public class AccountHolderService implements AccountHolderInt {
         return account.getBalance();
     }
 
-    //-------------------------------TRANSFER-------------------------------------//
+    //-------------------------------TRANSFER-------------------------------------------------------------------------//
 
    public Transaction transfer(AccountHolderTransferDTO transferDTO) {
      Account destinationAccount = accountRepository.findById(transferDTO.getDestinationAccountId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Destination account not found"));

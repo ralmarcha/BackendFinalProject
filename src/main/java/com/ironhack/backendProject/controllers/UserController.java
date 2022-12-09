@@ -4,15 +4,25 @@ import com.ironhack.backendProject.dto.users.CreateAccountHolderDTO;
 import com.ironhack.backendProject.dto.users.CreateAdminDTO;
 import com.ironhack.backendProject.dto.users.CreateThirdPartyDTO;
 import com.ironhack.backendProject.models.user.*;
+import com.ironhack.backendProject.repositories.user.UserRepository;
+import com.ironhack.backendProject.security.CustomUserDetails;
 import com.ironhack.backendProject.services.user.UserService;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
     @Autowired
     UserService userService;
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     //------------------------------CREATE ACCOUNT HOLDER----------------------------------//
     @PostMapping("/create-account-holder")
@@ -21,19 +31,29 @@ public class UserController {
         return userService.createAccountHolder(accountHolderDTO);
     }
 
-    //------------------------------CREATE THIRD PARTY----------------------------------//
+    //----------------------------------CREATE THIRD PARTY--------------------------------------------------//
     @PostMapping("/create-third-party")
     @ResponseStatus(value = HttpStatus.CREATED)
     public ThirdParty createThirdParty(@RequestBody CreateThirdPartyDTO createThirdPartyDTO) {
         return userService.createThirdParty(createThirdPartyDTO);
     }
 
-    //------------------------------CREATE ADMIN-----------------------------------------//
+    //------------------------------------CREATE ADMIN------------------------------------------------------//
     @PostMapping("/create-admin")
     @ResponseStatus(value = HttpStatus.CREATED)
     public Admin createAdmin(@RequestBody CreateAdminDTO adminDTO) {
         return userService.createAdmin(adminDTO);
     }
 
-    }
-
+    //-----------------------------------MODIFY PASSWORD-----------------------------------------------------//
+   @PatchMapping("/modify-password")
+   public void modifyPassword( @AuthenticationPrincipal UserDetails userDetails) {
+        //@RequestParam String password,
+    User user = userRepository.findByUsername(userDetails.getUsername()).get();
+   // user.setPassword(passwordEncoder.encode(password));
+    userRepository.save(user);
+      /* if (user.getRole().toString().equals("ROLE_ADMIN")){
+                return adminService.getAllAccounts();
+            }*/
+}
+}

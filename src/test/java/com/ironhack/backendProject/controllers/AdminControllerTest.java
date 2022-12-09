@@ -12,6 +12,7 @@ import com.ironhack.backendProject.repositories.account.AccountRepository;
 import com.ironhack.backendProject.repositories.user.AccountHolderRepository;
 import com.ironhack.backendProject.repositories.user.UserRepository;
 import com.ironhack.backendProject.services.user.AdminService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,12 @@ public class AdminControllerTest {
     void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
+
+    @AfterEach
+    void tearDown(){
+        accountRepository.deleteAll();
+        userRepository.deleteAll();
+    }
     //-------------------------------------GET ALL ACCOUNTS-----------------------------------------------------------//
     @Test
     void getAllAccounts_OK() throws Exception {
@@ -69,32 +76,12 @@ public class AdminControllerTest {
         Account result1 = adminService.createCheckingAccount(account1);
         Account result2 = adminService.createCheckingAccount(account2);
 
-        MvcResult result = mockMvc.perform(get("/accounts"))
+        MvcResult result = mockMvc.perform(get("/admin/accounts"))
                 .andExpect(status().isOk())
                 .andReturn();
         assertEquals(2, accountRepository.findAll().size());
     }
-    //-------------------------------------GET ALL ACCOUNTS AUTHORIZED-------------------------------------------------//
-    @Test
-     public void getAccounts_Authorized() throws Exception {
-        PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
-        LocalDate date = LocalDate.of(1982,5,10);
-        AccountHolder accountHolder = new AccountHolder("Raquel","123",date, address, null);
-        accountHolderRepository.save(accountHolder);
 
-        mockMvc.perform(get("/accounts").with(httpBasic(accountHolder.getUsername(),accountHolder.getPassword()))).andExpect(status().isOk());
-    }
-
-    //-------------------------------------GET ALL ACCOUNTS AUTHORIZED-------------------------------------------------//
-    @Test
-    public void getAccounts_unauthorized() throws Exception {
-        PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
-        LocalDate date = LocalDate.of(1982,5,10);
-        User user = new AccountHolder("Raquel","123",date, address, null);
-        userRepository.save(user);
-       // mockMvc.perform(get("/accounts")).andExpect(status().isUnauthorized());
-        mockMvc.perform(get("/accounts").with(httpBasic(user.getUsername(),"000"))).andExpect(status().isUnauthorized());
-    }
     //---------------------------------------------GET ACCOUNT--------------------------------------------------------//
     @Test
     void getAccountById_OK() throws Exception {
@@ -118,7 +105,6 @@ public class AdminControllerTest {
                 .andExpect(status().isNotFound()).andReturn();
         assertEquals("Account not found",result.getResponse().getErrorMessage());
     }
-
 
     //--------------------------------------CREATE ACCOUNTS-----------------------------------------------------------//
     @Test
@@ -165,7 +151,6 @@ public class AdminControllerTest {
     }
 
     //----------------------------------------------DELETE ACCOUNT----------------------------------------------------//
-
     @Test
     void deleteAccount_OK() throws Exception {
         PrimaryAddress address = new PrimaryAddress("c/Lesmes",8330 , "Barcelona", "Spain");
@@ -184,7 +169,6 @@ public class AdminControllerTest {
     }
 
     //--------------------------------------------SET BALANCE---------------------------------------------------------//
-
     @Test
     void setBalance_OK() throws Exception {
 

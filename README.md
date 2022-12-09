@@ -125,3 +125,82 @@
 ## Use Case Diagram
 
 ![](./use-case-diagram.jpeg)
+
+admin
+{
+
+"username": "admin",
+"password": "$2a$10$5KdIFstiKYrLqy4b5nQXXeR7rr4YzUSFdiEyBlhy2pkgINwONBtTq"
+},
+
+ah
+{
+"username": "Negu",
+"password": "$2a$10$tREU5kf2CBhMATy2/uHmFO3FYKaia/H244gLz99cifHZoWCrSeYLG",
+"dateOfBirth": "2002-01-01",
+"primaryAddress": {
+"address": "c/Lesmes",
+"postalCode": 8330,
+"city": "Barcelona",
+"country": "Spain"
+},
+"mailingAddress": null
+}
+
+tp
+{
+  "name": "becu",
+  "hashKey": "xxx"
+   
+ }
+
+accounts:
+{
+"secretKey": "abc",
+"balance": 800.00, //con 2 decimales""
+"primaryOwner": {
+"id":3,
+"username": "Negu",
+"password": "123",
+"dateOfBirth": "2002-01-01",
+"primaryAddress": {
+"address": "c/Lesmes",
+"postalCode": 8330,
+"city": "Barcelona",
+"country": "Spain"
+},
+"mailingAddress": null
+}}
+
+transfer
+{
+"originAccountId": 2,
+"destinationAccountId": 3,
+"amount": 50.00 ,
+"senderName": "Negu"
+}
+
+update
+{
+"secretKey": "aaa",
+"balance": 500.00,
+"primaryOwner": {
+"id": 3,
+"username": "Negu",
+"password": "$2a$10$Blqn0S6ZHzkWiiatMtkcNetw/sBlY3cj.el.WQqBBciyVp0cNYYZa",
+"dateOfBirth": "2002-01-01",
+"primaryAddress": {
+"address": "c/Lesmes",
+"postalCode": 8330,
+"city": "Barcelona",
+"country": "Spain"
+},
+"mailingAddress": null
+},
+"secondaryOwner": null,
+"creationDate": "2022-12-09",
+"lastUpdateDate": "2022-12-09",
+"status": null,
+"id": 1,
+"penalty_FEE": 40.00
+}

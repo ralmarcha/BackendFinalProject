@@ -89,7 +89,10 @@ UserRepository userRepository;
             Optional<User> user = userRepository.findByUsername(username);
             return accountRepository.findByPrimaryOwner(user.get());
         }
-
+       public List<Account> getAccountsByUserId(Long id) {
+              Optional<User> user = userRepository.findById(id);
+               return accountRepository.findByPrimaryOwner(user.get());
+    }
     }
 
 

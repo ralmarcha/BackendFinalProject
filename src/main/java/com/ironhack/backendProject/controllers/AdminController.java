@@ -11,11 +11,13 @@ import com.ironhack.backendProject.repositories.user.UserRepository;
 import com.ironhack.backendProject.security.CustomUserDetails;
 import com.ironhack.backendProject.services.account.AccountService;
 import com.ironhack.backendProject.services.user.AdminService;
+import com.ironhack.backendProject.services.user.CustomUserDetailsService;
 import com.ironhack.backendProject.services.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -33,22 +35,25 @@ public class AdminController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    UserService userService;
 
-    //-------------------------------------GET ALL ACCOUNTS------------------------------------------------//
-    @GetMapping("/accounts")
-    public List<Account> getAccounts(@AuthenticationPrincipal CustomUserDetails customUserDetails){
-      //  return adminService.getAllAccounts();
-      String username = customUserDetails.getUsername();
-      User user = userRepository.findByUsername(username).orElseThrow(()->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND,"User not found"));
-      /*if (user.getRole() == "ROLE_ADMIN"){
-          return adminService.getAllAccounts();
-      }else{*/
-          return accountService.getAccountsByUsername(username);
-     // }
-    }
+    @Autowired
+    CustomUserDetailsService customUserDetailsService;
 
-    //--------------------------------------CREATE ACCOUNTS------------------------------------------------//
+
+
+    //-------------------------------------GET ALL ACCOUNTS-----------------------------------------------------------//
+    @GetMapping("admin/accounts")
+    public List<Account> getAccounts(@AuthenticationPrincipal UserDetails userDetails){
+            return adminService.getAllAccounts();
+     }
+    //-----------------------------------------GET ALL USERS----------------------------------------------------------//
+    @GetMapping("/users")
+    public List<User> getUsers(){
+        return adminService.getAllUsers();  }
+
+    //--------------------------------------CREATE ACCOUNTS-----------------------------------------------------------//
     @PostMapping("/create-checking-account")
     @ResponseStatus(value = HttpStatus.CREATED)
     public Account createCheckingAccount(@RequestBody CreateCheckingAccountDTO checkingAccount){
@@ -67,35 +72,35 @@ public class AdminController {
         return adminService.createCreditCard(creditCardAccount);
     }
 
-    //-----------------------------------------DELETE ACCOUNT----------------------------------------------//
+    //-----------------------------------------DELETE ACCOUNT--------------------------------------------------------//
     @DeleteMapping("/delete-account/{id}")
     @ResponseStatus(value = HttpStatus.OK)
     public void deleteAccountById(@PathVariable Long id){
         adminService.deleteAccountById(id);
     }
 
-    //----------------------------------------GET ACCOUNT--------------------------------------------------//
+    //----------------------------------------GET ACCOUNT-------------------------------------------------------------//
     @GetMapping("/account/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Account findAccountById(@PathVariable Long id) {
         return adminService.findAccountById(id);
     }
 
-    //--------------------------------------GET BALANCE-----------------------------------------------------//
+    //--------------------------------------GET BALANCE---------------------------------------------------------------//
     @GetMapping("/check-balance/{id}")
     @ResponseStatus(HttpStatus.OK)
     public BigDecimal getBalance(@PathVariable Long id){
         return adminService.getBalance(id);
     }
 
-    //----------------------------------------SET BALANCE---------------------------------------------------//
+    //----------------------------------------SET BALANCE-------------------------------------------------------------//
     @PatchMapping("/set-balance/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Account setBalance(@PathVariable Long id, @RequestParam BigDecimal balance) {
         return adminService.setBalance(id,balance);
     }
 
-    //--------------------------------------UPDATE ACCOUNT-------------------------------------------------//
+    //--------------------------------------UPDATE ACCOUNT------------------------------------------------------------//
     @PutMapping("/update-checking-account/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Account updateAccount(@PathVariable Long id, @RequestBody UpdateAccountDTO accountDTO){

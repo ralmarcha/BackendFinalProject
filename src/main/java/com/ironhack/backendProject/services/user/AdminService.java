@@ -6,6 +6,7 @@ import com.ironhack.backendProject.dto.accounts.CreateSavingsDTO;
 import com.ironhack.backendProject.dto.accounts.UpdateAccountDTO;
 import com.ironhack.backendProject.enums.Status;
 import com.ironhack.backendProject.models.account.*;
+import com.ironhack.backendProject.models.user.User;
 import com.ironhack.backendProject.repositories.account.AccountRepository;
 import com.ironhack.backendProject.repositories.user.*;
 import com.ironhack.backendProject.services.account.AccountService;
@@ -29,16 +30,22 @@ public class AdminService implements AdminServiceInt {
     @Autowired
     AccountService accountService;
 
-//------------------------------------ACCOUNTS-----------------------------------------------//
-//----------------------------------GET ALL ACCOUNTS--------------------------------------//
+    @Autowired
+    UserRepository userRepository;
+
+//------------------------------------ACCOUNTS------------------------------------------------------------------------//
+//----------------------------------GET ALL ACCOUNTS-----------------------------------------------------------------//
     public List<Account> getAllAccounts() {
              return accountRepository.findAll();
 }
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
 
-    //-------------------------CREATE ACCOUNTS-----------------------------------------//
-    //------------------CREATE CHECKING ACCOUNT--------------------------------------//
+    //-------------------------CREATE ACCOUNTS------------------------------------------------------------------------//
+    //------------------CREATE CHECKING ACCOUNT-----------------------------------------------------------------------//
     public Account createCheckingAccount(CreateCheckingAccountDTO checkingAccount) {
-        //-------------primary owner not found-------------------//
+        //-------------primary owner not found-----------------------------------------------------------------------//
 
         if((Period.between(checkingAccount.getPrimaryOwner().getDateOfBirth(), LocalDate.now()).getYears())<24){
             StudentChecking studentChecking= new StudentChecking();
@@ -50,20 +57,20 @@ public class AdminService implements AdminServiceInt {
             return accountRepository.save(studentChecking);
         }else{
             Checking checking = new Checking();
-            //-------------primary owner not found-------------------//
+            //-------------primary owner not found--------------------------------------------------------------------//
             if(accountHolderRepository.findById(checkingAccount.getPrimaryOwner().getId()).isPresent()){
                 checking.setPrimaryOwner(checkingAccount.getPrimaryOwner());
             }else{
                 throw new IllegalArgumentException("Primary Owner does not exist");}
 
-            //-------------default status active-------------------//
+            //-------------default status active----------------------------------------------------------------------//
             if(checkingAccount.getStatus() == null)  {
                 checking.setStatus(Status.ACTIVE);
             }else{
                 checking.setStatus(checkingAccount.getStatus());
             }
 
-            //-------------accepted values for minimum balance--------------------//
+            //-------------accepted values for minimum balance--------------------------------------------------------//
             if(checkingAccount.getMinimumBalance() == null){
                 checking.setMinimumBalance(BigDecimal.valueOf(250));
             }else if(checkingAccount.getMinimumBalance().compareTo(BigDecimal.valueOf(250)) >= 0){
@@ -79,17 +86,17 @@ public class AdminService implements AdminServiceInt {
         }
     }
 
-    //----------------------------CREATE SAVINGS ACCOUNT--------------------------------------//
+    //----------------------------CREATE SAVINGS ACCOUNT--------------------------------------------------------------//
     public Account createSavingsAccount(CreateSavingsDTO savingsAccount) {
 
         Savings savings = new Savings();
-        //---------------------------primary owner not found-------------------//
+        //---------------------------primary owner not found----------------------------------------------------------//
         if(accountHolderRepository.findById(savingsAccount.getPrimaryOwner().getId()).isPresent()){
             savings.setPrimaryOwner(savingsAccount.getPrimaryOwner());
         }else{
             throw new IllegalArgumentException("Primary Owner does not exist");}
 
-        //---------------accepted values for interest rate--------------------//
+        //---------------accepted values for interest rate-----------------------------------------------------------//
         if(savingsAccount.getInterestRate() == null){
             savings.setInterestRate(BigDecimal.valueOf(0.0025));
         }else if (savingsAccount.getInterestRate().compareTo(BigDecimal.valueOf(0.5)) <= 0) {
@@ -98,7 +105,7 @@ public class AdminService implements AdminServiceInt {
             throw new IllegalArgumentException("Interest Rate can't be higher than 0.5");
         }
 
-        //---------------accepted values for minimum balance--------------------//
+        //---------------accepted values for minimum balance----------------------------------------------------------//
         if(savingsAccount.getMinimumBalance() == null){
             savings.setMinimumBalance(new BigDecimal(1000));
         }else if(savingsAccount.getMinimumBalance().compareTo(new BigDecimal(100)) > 0){
@@ -107,7 +114,7 @@ public class AdminService implements AdminServiceInt {
             throw new IllegalArgumentException("Minimum balance can't be lower than 100");
         }
 
-        //-----------------------default status active-------------------------//
+        //-----------------------default status active----------------------------------------------------------------//
         if(savingsAccount.getStatus() == null)  {
             savings.setStatus(Status.ACTIVE);
         }else{
@@ -120,17 +127,17 @@ public class AdminService implements AdminServiceInt {
         return accountRepository.save(savings);
     }
 
-    //-----------------------------CREATE CREDIT CARD--------------------------------------//
+    //-----------------------------CREATE CREDIT CARD-----------------------------------------------------------------//
     public Account createCreditCard(CreateCreditCardDTO creditCardAccount) {
         CreditCard creditCard = new CreditCard();
 
-        //-------------primary owner not found-------------------//
+        //-------------primary owner not found------------------------------------------------------------------------//
         if(accountHolderRepository.findById(creditCardAccount.getPrimaryOwner().getId()).isPresent()){
             creditCard.setPrimaryOwner(creditCardAccount.getPrimaryOwner());
         }else{
             throw new IllegalArgumentException("Primary Owner does not exist");}
 
-        //-------------accepted values for interest rate--------------------//
+        //-------------accepted values for interest rate--------------------------------------------------------------//
         if(creditCardAccount.getInterestRate() == null){
             creditCard.setInterestRate(BigDecimal.valueOf(0.2));
         }
@@ -140,7 +147,7 @@ public class AdminService implements AdminServiceInt {
             throw new IllegalArgumentException("Interest rate can't be lower than 0.1");
         }
 
-        //-------------------accepted values for credit limit----------------------------//
+        //-------------------accepted values for credit limit--------------------------------------------------------//
 
         if(creditCardAccount.getCreditLimit() == null){
             creditCard.setCreditLimit(BigDecimal.valueOf(100));
@@ -157,28 +164,27 @@ public class AdminService implements AdminServiceInt {
         return accountRepository.save(creditCard);
     }
 
-    //------------------------DELETE ACCOUNT----------------------------------//
+    //-----------------------------------DELETE ACCOUNT---------------------------------------------------------------//
     public void deleteAccountById(Long id) {
         if(accountRepository.findById(id).isPresent()){
             accountRepository.deleteById(id);
         }
     }
 
-    //--------------------------SET BALANCE----------------------------------//
+    //------------------------------------------SET BALANCE-----------------------------------------------------------//
     public Account setBalance(Long id, BigDecimal balance) {
-accountRepository.findById(id).orElseThrow(()->
-        new ResponseStatusException(HttpStatus.NOT_FOUND,
-                "Account not found"));
-
+        if (accountRepository.findById(id).isPresent()){
             Account account = accountRepository.findById(id).get();
             account.setBalance(balance);
             accountService.applyPenaltyFee(account);
             account.setBalance(balance);
             return  accountRepository.save(account);
-
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                "Account not found");
     }
 
-    //------------------------GET ACCOUNT BY ID----------------------------------//
+    //------------------------------------GET ACCOUNT BY ID-----------------------------------------------------------//
      public Account findAccountById(Long id) {
          accountRepository.findById(id).orElseThrow(()->
                  new ResponseStatusException(HttpStatus.NOT_FOUND,
@@ -190,7 +196,7 @@ accountRepository.findById(id).orElseThrow(()->
             return  accountRepository.findById(id).get();
     }
 
-    //--------------------------GET BALANCE----------------------------------//
+    //--------------------------------------GET BALANCE---------------------------------------------------------------//
     public BigDecimal getBalance(Long id) {
         if (accountRepository.findById(id).isPresent()) {
             Account account = accountRepository.findById(id).get();
