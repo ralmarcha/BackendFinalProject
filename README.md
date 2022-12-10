@@ -27,7 +27,7 @@ This project consists of a banking system built with the following Tech Stack :
 
 First, you need to create an Account Holder:
 
-- ***POST***  `/create-account-holder`  *(Role: "ADMIN")*
+- **POST**  `/create-account-holder`  *(Role: "ADMIN")*
 
 ```
   {
@@ -50,11 +50,11 @@ If your age is under 24, an Student Account will be created automatically.
 
 Some default values will be instantiated depending on account type. You can update them later.
 
-- ***POST***  `/create-account/checking` *(Role: "ADMIN")*
+- **POST**  `/create-account/checking` *(Role: "ADMIN")*
 
-- ***POST***  `/create-account/savings` *(Role: "ADMIN")*
+- **POST**  `/create-account/savings` *(Role: "ADMIN")*
 
-- ***POST***  `/create-account/credit` *(Role: "ADMIN")*
+- **POST**  `/create-account/credit` *(Role: "ADMIN")*
 
 ```
   {
@@ -81,9 +81,9 @@ Below, you can find a list of detailed functionalities of the application.
 
 There are three types or role : admins, account holders and third party.
 
-AccountHolders are able to transfer money from any of their accounts to any other account. The transfer only will be processed if it has sufficient funds.
+***AccountHolders*** are able to transfer money from any of their accounts to any other account. The transfer only will be processed if it has sufficient funds.
 
-  - ***POST*** `/transfer` *(Role: "ACCOUNT_HOLDER")*
+  - **POST** `/transfer` *(Role: "ACCOUNT_HOLDER")*
   
 ```
   {
@@ -95,19 +95,22 @@ AccountHolders are able to transfer money from any of their accounts to any othe
 ```
 AccountHolders can also get all their own accounts, check only one own account , check balance and modify their password.
 
-- ***GET*** `/user/accounts` *(Role: "ACCOUNT_HOLDER")*
+- **GET** `/user/accounts` *(Role: "ACCOUNT_HOLDER")*
 
-- ***GET*** `/user/check-balance`  *(Role: "ACCOUNT_HOLDER")*
-  @RequestParam `accountId` : Long, @RequestParam `userId` : Long
+- **GET** `/user/check-balance`  *(Role: "ACCOUNT_HOLDER")*
 
-- ***GET*** `/user/account/{id}`  *(Role: "ACCOUNT_HOLDER")*
+  @RequestParam `accountId` : Long, `userId` : Long
 
-- ***PATCH*** `/modify-password`  *(Role: "ACCOUNT_HOLDER")*
+- **GET** `/user/account/{id}`  *(Role: "ACCOUNT_HOLDER")*
+
+- **PATCH** `/modify-password`  *(Role: "ACCOUNT_HOLDER")*
+
   @RequestParam `password`: String
 
-Third-party users are able to receive and send money to other accounts. They must provide their hashed key in the header of the HTTP request.
 
- - ***POST*** `/transfer/send` `*(Role: "THIRD_PARTY")*
+***Third-party*** users are able to receive and send money to other accounts. They must provide their hashed key in the header of the HTTP request.
+
+ - **POST** `/transfer/send` `*(Role: "THIRD_PARTY")*
 
 ```
  {
@@ -115,7 +118,7 @@ Third-party users are able to receive and send money to other accounts. They mus
        "amount": BigDecimal with two decimals,
  }
 ```
-  - ***POST*** `/transfer/receive` *(Role: "THIRD_PARTY")*
+  - **POST** `/transfer/receive` *(Role: "THIRD_PARTY")*
 
 ```
 {
@@ -125,9 +128,9 @@ Third-party users are able to receive and send money to other accounts. They mus
 } 
 ```
 
-Admins are able to create any type of user, get all users, get all accounts, create any type of accounts, delete accounts, get account by id, check an account balance,  modify an account balance and update a checking account .
+***Admins*** are able to create any type of user, get all users, get all accounts, create any type of accounts, delete accounts, get account by id, check an account balance,  modify an account balance and update a checking account .
    
-   - ***POST*** `/create-third-party` *(Role: "ADMIN")*
+   - **POST** `/create-third-party` *(Role: "ADMIN")*
 
 ```
 {
@@ -135,27 +138,28 @@ Admins are able to create any type of user, get all users, get all accounts, cre
        "hashKey": String,
 }
 ```
-  - ***POST*** `/create-admin` *(Role: "ADMIN")*
+  - **POST** `/create-admin` *(Role: "ADMIN")*
 ```
 {
        "username": String,
        "password": String,
 }
 ```
-- ***GET*** `/check-balance/{id}`  *(Role: "ADMIN")*
+- **GET** `/check-balance/{id}`  *(Role: "ADMIN")*
   
-- ***GET*** `/accounts`  *(Roles: "ADMIN")*
+- **GET** `/accounts`  *(Roles: "ADMIN")*
 
-- ***GET*** `/users`  *(Roles: "ADMIN")*
+- **GET** `/users`  *(Roles: "ADMIN")*
   
-- ***GET*** `/account/{id}`  *(Role: "ADMIN")*
+- **GET** `/account/{id}`  *(Role: "ADMIN")*
 
-- ***PATCH*** `/set-balance/{id}`  *(Role: "ADMIN")*
-        @RequestParam  `balance` : BigDecimal
+- **PATCH** `/set-balance/{id}`  *(Role: "ADMIN")*
 
-- ***DELETE*** `/delete-account/{id}`  *(Role: "ADMIN")*
+   @RequestParam  `balance` : BigDecimal
 
-- ***PUT*** `/update-checking-account/{id}` *(Role: "ADMIN")*
+- **DELETE** `/delete-account/{id}`  *(Role: "ADMIN")*
+
+- **PUT** `/update-checking-account/{id}` *(Role: "ADMIN")*
 
 ```
 {
