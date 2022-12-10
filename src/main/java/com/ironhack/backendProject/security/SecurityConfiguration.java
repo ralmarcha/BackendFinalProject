@@ -28,7 +28,7 @@ public class SecurityConfiguration {
         httpSecurity.authorizeHttpRequests()
                .requestMatchers(HttpMethod.GET, "/user/check-balance").hasRole("ACCOUNT_HOLDER" )
                 .requestMatchers(HttpMethod.GET, "/user/accounts").hasRole("ACCOUNT_HOLDER" )
-               .requestMatchers(HttpMethod.POST, "/transfer").hasAnyRole( "ACCOUNT_HOLDER", "ADMIN")
+               .requestMatchers(HttpMethod.POST, "/transfer").hasRole( "ACCOUNT_HOLDER")
                .requestMatchers(HttpMethod.GET, "/accounts").hasAnyRole("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN")
                .requestMatchers(HttpMethod.POST, "/create-account/checking").hasRole("ADMIN")

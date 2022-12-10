@@ -5,8 +5,6 @@ import com.ironhack.backendProject.dto.transfers.SendTransferDTO;
 import com.ironhack.backendProject.models.account.Transaction;
 import com.ironhack.backendProject.models.account.Account;
 import com.ironhack.backendProject.repositories.account.TransactionRepository;
-import com.ironhack.backendProject.repositories.user.ThirdPartyRepository;
-import com.ironhack.backendProject.repositories.user.UserRepository;
 import com.ironhack.backendProject.services.interfaces.TransferServiceInt;
 import com.ironhack.backendProject.services.user.AdminService;
 import com.ironhack.backendProject.services.user.UserService;

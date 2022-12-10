@@ -27,7 +27,7 @@ public class Transaction {
     private Long id;
 
     @JsonDeserialize(using = LocalDateDeserializer.class)
-   @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private final LocalDate transferDate = LocalDate.now();
 
     @Digits(integer=9, fraction= 2)
@@ -38,6 +38,7 @@ public class Transaction {
     @ManyToOne
     @JoinColumn
     private Account destinationAccount;
+
 
     public Transaction(Account originAccount, Account destinationAccount, BigDecimal amount) {
         this.originAccount = originAccount;

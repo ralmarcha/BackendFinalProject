@@ -1,8 +1,12 @@
 package com.ironhack.backendProject.models.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ironhack.backendProject.models.account.Transaction;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Getter

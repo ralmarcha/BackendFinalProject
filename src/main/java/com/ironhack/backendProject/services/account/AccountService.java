@@ -5,7 +5,6 @@ import com.ironhack.backendProject.models.user.User;
 import com.ironhack.backendProject.repositories.account.AccountRepository;
 import com.ironhack.backendProject.repositories.user.UserRepository;
 import com.ironhack.backendProject.services.interfaces.AccountServiceInt;
-import com.ironhack.backendProject.services.user.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
