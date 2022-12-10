@@ -110,7 +110,7 @@ AccountHolders can also get all their own accounts, check only one own account ,
 
 ***Third-party*** users are able to receive and send money to other accounts. They must provide their hashed key in the header of the HTTP request.
 
- - **POST** `/transfer/send` `*(Role: "THIRD_PARTY")*
+ - **POST** `/transfer/send` *(Role: "THIRD_PARTY")*
 
 ```
  {
@@ -179,8 +179,8 @@ AccountHolders can also get all their own accounts, check only one own account ,
     "mailingAddress": String
     },
     "secondaryOwner": null,
-    "creationDate": LocalDate **(format: year-month-day)**,
-    "lastUpdateDate": LocalDate **(format: year-month-day)**,
+    "creationDate": LocalDate (format: year-month-day),
+    "lastUpdateDate": LocalDate (format: year-month-day),
     "status": ENUM (ACTIVE or FREEZE),
     "id": Long accountId,
     "penalty_FEE": BigDecimal with two decimals
