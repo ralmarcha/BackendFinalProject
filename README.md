@@ -6,17 +6,16 @@
 2. [User Requirements](#user-requirements)
 3. [How it works](#how-it-works)
 4. [End Points](#end-points)
-5. [Class Diagram](#class-diagram)
-6. [Use Case Diagram](#use-case-diagram)
+5. [Extra Features](#extra-features)
+6. [Class Diagram](#class-diagram)
+7. [Use Case Diagram](#use-case-diagram)
 
 ## General Information:
 
 This project consists of a banking system built with the following Tech Stack :
 
 - Java
-
 - SpringBoot including authentication with Spring Security
-
 - MySQL
 
 ## User Requirements:
@@ -28,13 +27,13 @@ This project consists of a banking system built with the following Tech Stack :
 
 First, you need to create an Account Holder:
 
-- ***POST :***  `/create-account-holder`  *(Role: "ADMIN")*
+- ***POST***  `/create-account-holder`  *(Role: "ADMIN")*
 
 ```
   {
     "username": String,
     "password": String,
-    "dateOfBirth": LocalDate **(format: year-month-day)**,
+    "dateOfBirth": LocalDate (format: year-month-day),
     "primaryAddress": {
         "address": String,
         "postalCode": int,
@@ -51,11 +50,11 @@ If your age is under 24, an Student Account will be created automatically.
 
 Some default values will be instantiated depending on account type. You can update them later.
 
-- ***POST :***  `/create-checking-account` *(Role: "ADMIN")*
+- ***POST***  `/create-account/checking` *(Role: "ADMIN")*
 
-- ***POST :*** `/create-savings-account` *(Role: "ADMIN")*
+- ***POST***  `/create-account/savings` *(Role: "ADMIN")*
 
-- ***POST :***  `/create-credit-card` *(Role: "ADMIN")*
+- ***POST***  `/create-account/credit` *(Role: "ADMIN")*
 
 ```
   {
@@ -65,7 +64,7 @@ Some default values will be instantiated depending on account type. You can upda
         "id": Long userId,
         "username": String,
         "password": String,
-        "dateOfBirth": LocalDate **(format: year-month-day)**,
+        "dateOfBirth": LocalDate (format: year-month-day),
         "primaryAddress": {
             "address": String,
             "postalCode": int,
@@ -84,7 +83,7 @@ There are three types or role : admins, account holders and third party.
 
 AccountHolders are able to transfer money from any of their accounts to any other account. The transfer only will be processed if it has sufficient funds.
 
-  - ***POST :*** `/transfer` *(Role: "ACCOUNT_HOLDER")*
+  - ***POST*** `/transfer` *(Role: "ACCOUNT_HOLDER")*
   
 ```
   {
@@ -94,14 +93,21 @@ AccountHolders are able to transfer money from any of their accounts to any othe
      "senderName": String
   }
 ```
+AccountHolders can also get all their own accounts, check only one own account , check balance and modify their password.
 
+- ***GET*** `/user/accounts` *(Role: "ACCOUNT_HOLDER")*
 
+- ***GET*** `/user/check-balance`  *(Role: "ACCOUNT_HOLDER")*
+  @RequestParam `accountId` : Long, @RequestParam `userId` : Long
 
+- ***GET*** `/user/account/{id}`  *(Role: "ACCOUNT_HOLDER")*
 
+- ***PATCH*** `/modify-password`  *(Role: "ACCOUNT_HOLDER")*
+  @RequestParam `password`: String
 
+Third-party users are able to receive and send money to other accounts. They must provide their hashed key in the header of the HTTP request.
 
-
- - ***POST :*** `/transfer/send` `*(Role: "THIRD_PARTY")*
+ - ***POST*** `/transfer/send` `*(Role: "THIRD_PARTY")*
 
 ```
  {
@@ -109,7 +115,7 @@ AccountHolders are able to transfer money from any of their accounts to any othe
        "amount": BigDecimal with two decimals,
  }
 ```
-  - ***POST :*** `/transfer/receive` *(Role: "THIRD_PARTY")*
+  - ***POST*** `/transfer/receive` *(Role: "THIRD_PARTY")*
 
 ```
 {
@@ -118,29 +124,31 @@ AccountHolders are able to transfer money from any of their accounts to any othe
        "amount": BigDecimal with two decimals,
 } 
 ```
-   - ***POST :*** `/create-third-party` *(Role: "ADMIN")*
+
+Admins are able to create any type of user, get all users, get all accounts, create any type of accounts, delete accounts, get account by id, check an account balance,  modify an account balance and update a checking account .
+   
+   - ***POST*** `/create-third-party` *(Role: "ADMIN")*
+
 ```
 {
        "name": String,
        "hashKey": String,
 }
 ```
-  - ***POST :*** `/create-admin` *(Role: "ADMIN")*
+  - ***POST*** `/create-admin` *(Role: "ADMIN")*
 ```
 {
        "username": String,
        "password": String,
 }
 ```
-
-- ***GET :*** `/check-user-balance`  *(Role: "ACCOUNT_HOLDER")*
-    @RequestParam `accountId` : Long, @RequestParam `userId` : Long
-
-- ***GET :*** `/check-balance/{id}`  *(Role: "ADMIN")*
+- ***GET*** `/check-balance/{id}`  *(Role: "ADMIN")*
   
-- ***GET :*** `/accounts`  *(Roles: "ADMIN", "ACCOUNT_HOLDER")*
+- ***GET*** `/accounts`  *(Roles: "ADMIN")*
+
+- ***GET*** `/users`  *(Roles: "ADMIN")*
   
-- ***GET :*** `/account/{id}`  *(Roles: "ADMIN", "ACCOUNT_HOLDER")*
+- ***GET*** `/account/{id}`  *(Role: "ADMIN")*
 
 - ***PATCH*** `/set-balance/{id}`  *(Role: "ADMIN")*
         @RequestParam  `balance` : BigDecimal
@@ -154,10 +162,10 @@ AccountHolders are able to transfer money from any of their accounts to any othe
     "secretKey": String,
     "balance": BigDecimal with two decimals,
     "primaryOwner": {
-        "id": Long **(userId)**,
+        "id": Long userId,
         "username": String,
         "password": String,
-        "dateOfBirth": LocalDate **(format: year-month-day)**,
+        "dateOfBirth": LocalDate (format: year-month-day),
         "primaryAddress": {
             "address": String,
             "postalCode": int,
@@ -169,17 +177,26 @@ AccountHolders are able to transfer money from any of their accounts to any othe
     "secondaryOwner": null,
     "creationDate": LocalDate **(format: year-month-day)**,
     "lastUpdateDate": LocalDate **(format: year-month-day)**,
-    "status": ENUM **(ACTIVE or FREEZE)**,
-    "id": Long **(accountId)**,
+    "status": ENUM (ACTIVE or FREEZE),
+    "id": Long accountId,
     "penalty_FEE": BigDecimal with two decimals
 }
 ```
+## Extra Features:
 
-## Class Diagram
+A penalty Fee will be applied in all accounts when drops below the minimum balance required.
+
+A yearly interest rate will be applied in savings accounts.
+
+A monthly interest rate will be applied in credit cards.
+
+A monthly maintenance fee will be applied in checking accounts.
+
+## Class Diagram:
 
 ![](./class-diagram.jpeg)
 
-## Use Case Diagram
+## Use Case Diagram:
 
 ![](./use-case-diagram.jpeg)
 
